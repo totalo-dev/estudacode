@@ -2,6 +2,26 @@ import Link from "next/link";
 import { Github, Twitter, Linkedin } from "lucide-react";
 import Image from "next/image";
 
+function InstagramIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="bg-surface border-t border-card mt-20">
@@ -46,6 +66,9 @@ export default function Footer() {
               </a>
               <a href="#" className="text-secondary hover:text-text transition-colors" aria-label="LinkedIn">
                 <Linkedin size={20} />
+              </a>
+              <a href="#" className="text-secondary hover:text-text transition-colors" aria-label="Instagram">
+                <InstagramIcon size={20} />
               </a>
             </div>
           </div>

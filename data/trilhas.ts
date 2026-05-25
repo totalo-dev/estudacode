@@ -21,7 +21,7 @@ export const trilhas: Trilha[] = [
     dificuldade: "intermediario",
     duracaoEstimada: "60h",
     totalModulos: 12,
-    progresso: 45,
+    progresso: 0,
     cor: "#10B981",
     icone: "⚛️",
   },
