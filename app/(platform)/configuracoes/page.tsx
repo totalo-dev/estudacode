@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import { User, Lock, Bell, Trash2, CheckCircle, Eye, EyeOff, Camera } from "lucide-react";
+import { User, Lock, Bell, Trash2, CheckCircle, Eye, EyeOff, Camera, X, Upload } from "lucide-react";
 import Image from "next/image";
 import { useAvatar } from "@/lib/hooks/useAvatar";
 
@@ -16,7 +16,49 @@ export default function ConfiguracoesPage() {
   const [showSenhaAtual, setShowSenhaAtual] = useState(false);
   const [showNovaSenha, setShowNovaSenha] = useState(false);
   const [showConfirmar, setShowConfirmar] = useState(false);
-  const { avatarUrl } = useAvatar();
+  const { avatarUrl, setAvatarUrl } = useAvatar();
+
+  // Modal de avatar
+  const [modalAvatarAberto, setModalAvatarAberto] = useState(false);
+  const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
+  const [arrastando, setArrastando] = useState(false);
+  const inputAvatarRef = useRef<HTMLInputElement>(null);
+
+  function processarArquivoAvatar(file: File) {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => setPreviewAvatar(e.target?.result as string);
+    reader.readAsDataURL(file);
+  }
+
+  function handleAvatarFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) processarArquivoAvatar(file);
+  }
+
+  function handleAvatarDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setArrastando(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) processarArquivoAvatar(file);
+  }
+
+  function handleConfirmarAvatar() {
+    if (previewAvatar) setAvatarUrl(previewAvatar);
+    setModalAvatarAberto(false);
+    setPreviewAvatar(null);
+  }
+
+  function handleCancelarAvatar() {
+    setModalAvatarAberto(false);
+    setPreviewAvatar(null);
+  }
+
+  function handleRemoverAvatar() {
+    setAvatarUrl(null);
+    setModalAvatarAberto(false);
+    setPreviewAvatar(null);
+  }
 
   // Zona de perigo
   const [zonaPerigoLiberada, setZonaPerigoLiberada] = useState(false);
@@ -110,7 +152,7 @@ export default function ConfiguracoesPage() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => { window.location.href = "/perfil/usuario"; }}
+                        onClick={() => setModalAvatarAberto(true)}
                         className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                         aria-label="Alterar foto"
                       >
@@ -120,6 +162,13 @@ export default function ConfiguracoesPage() {
                     <div>
                       <p className="text-text font-medium text-sm">Foto de perfil</p>
                       <p className="text-secondary text-xs mt-0.5">PNG, JPG • Máx. 5MB</p>
+                      <button
+                        type="button"
+                        onClick={() => setModalAvatarAberto(true)}
+                        className="text-xs text-primary hover:text-blue-400 transition-colors mt-1 font-medium"
+                      >
+                        Alterar foto
+                      </button>
                     </div>
                   </div>
 
@@ -193,15 +242,15 @@ export default function ConfiguracoesPage() {
                   </p>
                   <div className="w-full pt-6 mt-2 border-t border-card flex justify-around text-center">
                     <div>
-                      <p className="text-lg font-bold text-text">0</p>
+                      <p className="text-lg font-bold text-text">—</p>
                       <p className="text-xs text-secondary mt-1">Trilhas</p>
                     </div>
                     <div>
-                      <p className="text-lg font-bold text-text">0</p>
+                      <p className="text-lg font-bold text-text">—</p>
                       <p className="text-xs text-secondary mt-1">Projetos</p>
                     </div>
                     <div>
-                      <p className="text-lg font-bold text-text">0</p>
+                      <p className="text-lg font-bold text-text">—</p>
                       <p className="text-xs text-secondary mt-1">Badges</p>
                     </div>
                   </div>
@@ -382,7 +431,11 @@ export default function ConfiguracoesPage() {
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
           onClick={(e) => e.target === e.currentTarget && setShowModalConfirmacao(false)}
         >
-          <div className="bg-surface border border-card rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="bg-surface border border-card rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+          >
             <div className="p-6 text-center space-y-4">
               <div className="w-14 h-14 bg-red-400/20 rounded-full flex items-center justify-center mx-auto text-red-400">
                 <Trash2 size={28} />
@@ -407,6 +460,74 @@ export default function ConfiguracoesPage() {
                   className="flex-1 px-4 py-2.5 rounded-lg bg-red-400 text-white hover:bg-red-500 transition-colors text-sm font-medium"
                 >
                   Confirmar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de troca de avatar */}
+      {modalAvatarAberto && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={(e) => e.target === e.currentTarget && handleCancelarAvatar()}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="bg-surface border border-card rounded-2xl w-full max-w-md shadow-2xl"
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-card">
+              <h2 className="text-lg font-semibold text-text">Alterar foto de perfil</h2>
+              <button onClick={handleCancelarAvatar} aria-label="Fechar" className="text-secondary hover:text-text transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-6 space-y-5">
+              {/* Preview */}
+              <div className="flex justify-center">
+                <div className="relative w-24 h-24 rounded-full overflow-hidden ring-4 ring-primary/30">
+                  {previewAvatar ? (
+                    <Image src={previewAvatar} alt="Preview" fill className="object-cover" />
+                  ) : avatarUrl ? (
+                    <Image src={avatarUrl} alt="Avatar atual" fill className="object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-3xl font-bold">U</div>
+                  )}
+                </div>
+              </div>
+              {/* Drop zone */}
+              <div
+                onDragOver={(e) => { e.preventDefault(); setArrastando(true); }}
+                onDragLeave={() => setArrastando(false)}
+                onDrop={handleAvatarDrop}
+                onClick={() => inputAvatarRef.current?.click()}
+                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
+                  arrastando ? "border-primary bg-primary/10" : "border-card hover:border-primary/50 hover:bg-card/50"
+                }`}
+              >
+                <Upload size={28} className="mx-auto text-secondary mb-3" />
+                <p className="text-text text-sm font-medium mb-1">Arraste uma imagem ou clique para selecionar</p>
+                <p className="text-secondary text-xs">PNG, JPG ou GIF • Máx. 5MB</p>
+                <input ref={inputAvatarRef} type="file" accept="image/*" onChange={handleAvatarFileChange} className="hidden" />
+              </div>
+              {/* Ações */}
+              <div className="flex gap-3">
+                {avatarUrl && (
+                  <button onClick={handleRemoverAvatar} className="flex-1 px-4 py-2.5 rounded-lg border border-red-400/30 text-red-400 hover:bg-red-400/10 transition-colors text-sm font-medium">
+                    Remover foto
+                  </button>
+                )}
+                <button onClick={handleCancelarAvatar} className="flex-1 px-4 py-2.5 rounded-lg border border-card text-secondary hover:text-text hover:bg-card transition-colors text-sm font-medium">
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleConfirmarAvatar}
+                  disabled={!previewAvatar}
+                  className="flex-1 px-4 py-2.5 rounded-lg bg-primary text-white hover:bg-blue-600 transition-colors text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Salvar
                 </button>
               </div>
             </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import type { Modulo, Topico } from "@/lib/types";
 
 /**
  * Persiste o progresso do aluno no localStorage.
@@ -89,6 +90,14 @@ export function useProgresso() {
     [progresso]
   );
 
+  /** Retorna se um tópico está concluído a partir do próprio objeto de tópico */
+  const topicoConcluido = useCallback(
+    (topico: Topico): boolean => {
+      return progresso.topicos[topico.id] ?? topico.concluido;
+    },
+    [progresso]
+  );
+
   /** Calcula o progresso percentual de uma lista de tópicos */
   const calcularProgresso = useCallback(
     (topicoIds: string[], fallbacks: boolean[] = []): number => {
@@ -99,6 +108,27 @@ export function useProgresso() {
       return Math.round((concluidos / topicoIds.length) * 100);
     },
     [progresso]
+  );
+
+  /** Calcula o progresso percentual de um módulo completo */
+  const calcularProgressoModulo = useCallback(
+    (modulo: Modulo): number => {
+      return calcularProgresso(
+        modulo.topicos.map((t) => t.id),
+        modulo.topicos.map((t) => t.concluido)
+      );
+    },
+    [calcularProgresso]
+  );
+
+  /** Considera um módulo concluído quando todos os tópicos estão concluídos */
+  const moduloConcluidoEfetivo = useCallback(
+    (modulo: Modulo): boolean => {
+      const salvo = progresso.modulos[modulo.id];
+      if (salvo !== undefined) return salvo;
+      return calcularProgressoModulo(modulo) === 100 || modulo.concluido;
+    },
+    [calcularProgressoModulo, progresso]
   );
 
   /** Limpa todo o progresso salvo */
@@ -112,9 +142,12 @@ export function useProgresso() {
     progresso,
     toggleTopico,
     toggleModulo,
+    topicoConcluido,
     topicosConcluido,
     moduloConcluido,
     calcularProgresso,
+    calcularProgressoModulo,
+    moduloConcluidoEfetivo,
     limparProgresso,
   };
 }

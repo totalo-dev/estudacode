@@ -78,8 +78,8 @@
 
 ## ⚪ Melhorias de UX
 
-- [ ] `busca/page.tsx` — adicionar debounce na atualização da URL (atualmente atualiza a cada keystroke)
-- [ ] `notificacoes/page.tsx` — adicionar botão "Marcar como lida" individual e "Marcar todas como lidas"
-- [ ] `configuracoes/page.tsx` — botão de câmera no avatar deve abrir modal de upload inline (igual ao perfil), não redirecionar para `/perfil/usuario`
-- [ ] Configurações preview do perfil — "0 Trilhas", "0 Projetos", "0 Badges" hardcoded; deve refletir dados reais
-- [ ] Planos — página de cadastro deve ler `?plano=` e pré-selecionar o plano correspondente
+- [x] `busca/page.tsx` — adicionar debounce na atualização da URL (atualmente atualiza a cada keystroke)
+- [x] `notificacoes/page.tsx` — adicionar botão "Marcar como lida" individual e "Marcar todas como lidas"
+- [x] `configuracoes/page.tsx` — botão de câmera no avatar deve abrir modal de upload inline (igual ao perfil), não redirecionar para `/perfil/usuario`
+- [x] Configurações preview do perfil — "0 Trilhas", "0 Projetos", "0 Badges" hardcoded; deve refletir dados reais
+- [x] Planos — página de cadastro deve ler `?plano=` e pré-selecionar o plano correspondente

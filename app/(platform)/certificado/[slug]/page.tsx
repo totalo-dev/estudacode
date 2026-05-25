@@ -22,11 +22,14 @@ function gerarId(slug: string) {
 }
 
 export default function CertificadoPage({ params }: { params: { slug: string } }) {
-  const trilha = getTrilhaBySlug(params.slug);
+  const trilhaEncontrada = getTrilhaBySlug(params.slug);
   const certRef = useRef<HTMLDivElement>(null);
 
-  if (!trilha) notFound();
+  if (!trilhaEncontrada) {
+    return notFound();
+  }
 
+  const trilha = trilhaEncontrada;
   const certificadoId = gerarId(params.slug);
 
   function handleImprimir() {

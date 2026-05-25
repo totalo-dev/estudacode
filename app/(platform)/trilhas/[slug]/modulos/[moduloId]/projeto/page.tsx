@@ -9,6 +9,7 @@ import Badge from "@/components/ui/Badge";
 import ProgressBar from "@/components/progress/ProgressBar";
 import { getTrilhaBySlug } from "@/lib/services/trilhas.service";
 import { getModulosBySlug } from "@/lib/services/modulos.service";
+import { useProgresso } from "@/lib/hooks/useProgresso";
 
 // Projetos por módulo — será substituído por banco de dados
 const projetosPorModulo: Record<string, {
@@ -19,6 +20,28 @@ const projetosPorModulo: Record<string, {
   recursos: { label: string; href: string }[];
   dificuldade: "iniciante" | "intermediario" | "avancado";
 }> = {
+  "demo-2": {
+    titulo: "Página de apresentação",
+    descricao: "Crie uma página simples com seu nome, uma descrição curta e um link de contato. O objetivo é praticar escopo pequeno, estrutura clara e entrega final.",
+    objetivos: [
+      "Criar uma entrega completa em pouco tempo",
+      "Praticar HTML semântico",
+      "Organizar requisitos antes de estilizar",
+      "Validar a experiência em mobile",
+    ],
+    requisitos: [
+      { id: "1", texto: "Adicionar um título com seu nome" },
+      { id: "2", texto: "Escrever uma descrição curta" },
+      { id: "3", texto: "Adicionar um link de contato" },
+      { id: "4", texto: "Usar pelo menos uma tag semântica" },
+      { id: "5", texto: "Testar o layout em uma tela pequena" },
+    ],
+    recursos: [
+      { label: "MDN HTML básico", href: "https://developer.mozilla.org/pt-BR/docs/Learn/HTML/Introduction_to_HTML" },
+      { label: "Guia de responsividade", href: "https://developer.mozilla.org/pt-BR/docs/Learn/CSS/CSS_layout/Responsive_Design" },
+    ],
+    dificuldade: "iniciante",
+  },
   "3": {
     titulo: "App com Context API",
     descricao: "Construa uma aplicação React completa que utiliza Context API para gerenciar estado global. O app deve ter tema claro/escuro, carrinho de compras ou lista de favoritos compartilhada entre componentes.",
@@ -176,6 +199,8 @@ export default function ProjetoModuloPage({ params }: { params: { slug: string; 
   const trilhaModulos = getModulosBySlug(params.slug);
   const modulo = trilhaModulos.find((m) => m.id === params.moduloId);
   const projeto = projetosPorModulo[params.moduloId];
+  const topicoProjeto = modulo?.topicos.find((t) => t.tipo === "projeto");
+  const { toggleTopico } = useProgresso();
 
   const [checklist, setChecklist] = useState<Record<string, boolean>>({});
   const [concluido, setConcluido] = useState(false);
@@ -186,6 +211,11 @@ export default function ProjetoModuloPage({ params }: { params: { slug: string; 
 
   function toggleItem(id: string) {
     setChecklist((prev) => ({ ...prev, [id]: !prev[id] }));
+  }
+
+  function concluirProjeto() {
+    if (topicoProjeto) toggleTopico(topicoProjeto.id, true);
+    setConcluido(true);
   }
 
   if (!projeto) {
@@ -315,7 +345,7 @@ export default function ProjetoModuloPage({ params }: { params: { slug: string; 
                     variant="primary"
                     size="lg"
                     className="w-full"
-                    onClick={() => setConcluido(true)}
+                    onClick={concluirProjeto}
                   >
                     <Trophy size={18} className="mr-2" />
                     Marcar Projeto como Concluído

@@ -8,6 +8,7 @@ import { ChevronLeft, Lightbulb, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
 import { getTrilhaBySlug } from "@/lib/services/trilhas.service";
 import { getModulosBySlug } from "@/lib/services/modulos.service";
+import { useProgresso } from "@/lib/hooks/useProgresso";
 
 // Exercícios por módulo — será substituído por banco de dados
 const exerciciosPorModulo: Record<string, {
@@ -20,6 +21,24 @@ const exerciciosPorModulo: Record<string, {
   solucao: string;
   explicacao: string;
 }[]> = {
+  "demo-1": [
+    {
+      id: "1",
+      titulo: "Monte seu plano de estudo",
+      enunciado: "Crie um array chamado `plano` com três etapas de estudo e exiba a primeira etapa usando `console.log`.",
+      contexto: "Este exercício confirma se você entendeu a ideia de quebrar o aprendizado em passos pequenos e verificáveis.",
+      dicas: [
+        "Use const plano = [...] para criar o array.",
+        "Arrays começam no índice 0.",
+        "Use console.log(plano[0]) para exibir o primeiro item.",
+      ],
+      verificacao: (codigo) => codigo.includes("plano") && codigo.includes("[") && codigo.includes("console.log"),
+      solucao: `const plano = ["ler conteúdo", "praticar", "revisar feedback"];
+
+console.log(plano[0]);`,
+      explicacao: "Criamos uma lista simples de etapas e acessamos o primeiro item pelo índice 0.",
+    },
+  ],
   "1": [
     {
       id: "1",
@@ -116,6 +135,7 @@ export default function ExercicioPage({ params }: { params: { slug: string; modu
   const [showSolution, setShowSolution] = useState(false);
   const [userCode, setUserCode] = useState("");
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const { toggleTopico, topicoConcluido } = useProgresso();
 
   const trilha = getTrilhaBySlug(params.slug);
   const trilhaModulos = getModulosBySlug(params.slug);
@@ -123,6 +143,8 @@ export default function ExercicioPage({ params }: { params: { slug: string; modu
   const exerciciosDoModulo = exerciciosPorModulo[params.moduloId] || exerciciosPorModulo["2"] || [];
   const exercicioIndex = Math.max(0, parseInt(params.exercicioId) - 1);
   const exercicio = exerciciosDoModulo[exercicioIndex] || exerciciosDoModulo[0];
+  const topicoExercicio = modulo?.topicos.filter((t) => t.tipo === "exercicio")[exercicioIndex];
+  const exercicioConcluido = topicoExercicio ? topicoConcluido(topicoExercicio) : false;
 
   // Navegação entre exercícios
   const exercicioAnterior = exercicioIndex > 0 ? exerciciosDoModulo[exercicioIndex - 1] : null;
@@ -131,6 +153,7 @@ export default function ExercicioPage({ params }: { params: { slug: string; modu
   function handleVerify() {
     if (!exercicio) return;
     if (exercicio.verificacao(userCode)) {
+      if (topicoExercicio) toggleTopico(topicoExercicio.id, true);
       setFeedback({ type: "success", message: "Excelente! Sua solução está correta. Continue para o próximo exercício." });
     } else {
       setFeedback({ type: "error", message: "Ainda não está certo. Revise o enunciado e tente novamente. Use as dicas se precisar." });
@@ -164,8 +187,16 @@ export default function ExercicioPage({ params }: { params: { slug: string; modu
         </Link>
 
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-3xl font-bold text-text">Exercício: {exercicio.titulo}</h1>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-2">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-text">Exercício: {exercicio.titulo}</h1>
+              {exercicioConcluido && (
+                <p className="mt-1 text-sm text-success flex items-center gap-1.5">
+                  <CheckCircle size={14} />
+                  Exercício concluído
+                </p>
+              )}
+            </div>
             <span className="text-sm text-secondary">
               {exercicioIndex + 1} de {exerciciosDoModulo.length}
             </span>
@@ -224,7 +255,7 @@ export default function ExercicioPage({ params }: { params: { slug: string; modu
                 placeholder="// Escreva seu código aqui..."
                 className="w-full h-64 bg-surface border border-card rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
               />
-              <div className="flex space-x-3 mt-4">
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
                 <Button variant="primary" onClick={handleVerify} className="flex-1">
                   <CheckCircle size={18} className="mr-2" />
                   Verificar
@@ -259,7 +290,7 @@ export default function ExercicioPage({ params }: { params: { slug: string; modu
           </div>
         </div>
 
-        <div className="mt-8 flex justify-between">
+        <div className="mt-8 flex flex-col sm:flex-row sm:justify-between gap-3">
           {exercicioAnterior ? (
             <Link href={`/trilhas/${params.slug}/modulos/${params.moduloId}/exercicios/${exercicioIndex}`}>
               <Button variant="ghost">

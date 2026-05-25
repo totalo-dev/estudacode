@@ -10,10 +10,17 @@ export default function RecuperarSenhaPage() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [erro, setErro] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Envio de e-mail será implementado com o backend de autenticação
+    setErro("");
+
+    if (!email.includes("@")) {
+      setErro("Informe um e-mail válido para receber o link.");
+      return;
+    }
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -62,11 +69,18 @@ export default function RecuperarSenhaPage() {
                   autoComplete="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => { setEmail(e.target.value); setErro(""); }}
                   placeholder="seu@email.com"
+                  aria-invalid={erro ? true : undefined}
                   className="w-full px-4 py-2.5 rounded-lg bg-surface border border-card text-text placeholder-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 />
               </div>
+
+              {erro && (
+                <p role="alert" className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 px-4 py-2.5 rounded-lg">
+                  {erro}
+                </p>
+              )}
 
               <Button
                 type="submit"

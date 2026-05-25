@@ -1,3 +1,5 @@
+"use client";
+
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
@@ -8,20 +10,74 @@ import { getModulosBySlug } from "@/lib/services/modulos.service";
 import { Clock, BookOpen, CheckCircle, Circle, Play, Award } from "lucide-react";
 import { getDifficultyColor, getDifficultyLabel } from "@/lib/utils";
 import Link from "next/link";
+import { useProgresso } from "@/lib/hooks/useProgresso";
+import { temAcesso, useAuth } from "@/lib/hooks/useAuth";
+import type { Modulo, Topico } from "@/lib/types";
+
+function getTopicoHref(slug: string, modulo: Modulo, topico: Topico) {
+  if (topico.tipo === "conteudo") {
+    return `/trilhas/${slug}/modulos/${modulo.id}/conteudo`;
+  }
+
+  if (topico.tipo === "exercicio") {
+    const exercicioIndex = modulo.topicos
+      .filter((t) => t.tipo === "exercicio")
+      .findIndex((t) => t.id === topico.id);
+    return `/trilhas/${slug}/modulos/${modulo.id}/exercicios/${exercicioIndex + 1}`;
+  }
+
+  return `/trilhas/${slug}/modulos/${modulo.id}/${topico.tipo}`;
+}
 
 export default function TrilhaPage({ params }: { params: { slug: string } }) {
   const trilha = getTrilhaBySlug(params.slug);
   const trilhaModulos = getModulosBySlug(params.slug);
+  const { topicoConcluido, calcularProgressoModulo, moduloConcluidoEfetivo } = useProgresso();
+  const { plano } = useAuth();
 
   if (!trilha) {
     return <DashboardLayout><div>Trilha não encontrada</div></DashboardLayout>;
   }
 
-  const modulosConcluidos = trilhaModulos.filter(m => m.concluido).length;
+  if (!temAcesso(plano, trilha.planoNecessario)) {
+    return (
+      <DashboardLayout>
+        <div className="max-w-2xl mx-auto">
+          <Card>
+            <div className="text-center py-8">
+              <span className="text-5xl mb-4 block">{trilha.icone}</span>
+              <h1 className="text-2xl font-bold text-text mb-2">{trilha.nome}</h1>
+              <p className="text-secondary mb-6">
+                Esta trilha faz parte do plano Pro. A trilha demo continua liberada para testar a plataforma.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link href="/planos">
+                  <Button variant="primary">Ver planos</Button>
+                </Link>
+                <Link href="/trilhas/trilha-demo">
+                  <Button variant="outline">Abrir trilha demo</Button>
+                </Link>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  const modulosConcluidos = trilhaModulos.filter((m) => moduloConcluidoEfetivo(m)).length;
   const trilhaConcluida = trilhaModulos.length > 0 && modulosConcluidos === trilhaModulos.length;
+  const totalTopicos = trilhaModulos.reduce((acc, modulo) => acc + modulo.topicos.length, 0);
+  const topicosConcluidos = trilhaModulos.reduce(
+    (acc, modulo) => acc + modulo.topicos.filter((topico) => topicoConcluido(topico)).length,
+    0
+  );
+  const progressoTrilha = totalTopicos > 0
+    ? Math.round((topicosConcluidos / totalTopicos) * 100)
+    : trilha.progresso;
 
   // Primeiro módulo não concluído para o botão Continuar
-  const proximoModulo = trilhaModulos.find(m => !m.concluido) || trilhaModulos[0];
+  const proximoModulo = trilhaModulos.find((m) => !moduloConcluidoEfetivo(m)) || trilhaModulos[0];
 
   return (
     <DashboardLayout>
@@ -64,22 +120,22 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
               <Link href={`/trilhas/${params.slug}/modulos/${proximoModulo.id}/conteudo`}>
                 <Button variant="primary" size="lg">
                   <Play size={18} className="mr-2" />
-                  {trilha.progresso > 0 ? "Continuar" : "Começar"}
+                  {progressoTrilha > 0 ? "Continuar" : "Começar"}
                 </Button>
               </Link>
             )}
           </div>
         </div>
 
-        {trilha.progresso > 0 && (
+        {progressoTrilha > 0 && (
           <Card>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-text">Seu Progresso</span>
               <span className="text-sm text-secondary">
-                {modulosConcluidos}/{trilhaModulos.length} módulos • {trilha.progresso}%
+                {modulosConcluidos}/{trilhaModulos.length} módulos • {progressoTrilha}%
               </span>
             </div>
-            <ProgressBar value={trilha.progresso} />
+            <ProgressBar value={progressoTrilha} />
             {trilhaConcluida && (
               <p className="text-success text-sm mt-3 flex items-center space-x-2">
                 <CheckCircle size={14} />
@@ -99,13 +155,17 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
             </Card>
           ) : (
             <div className="space-y-4">
-              {trilhaModulos.map((modulo, index) => (
+              {trilhaModulos.map((modulo, index) => {
+                const moduloConcluido = moduloConcluidoEfetivo(modulo);
+                const progressoModulo = calcularProgressoModulo(modulo);
+
+                return (
                 <Card key={modulo.id} hover>
                   <div className="flex items-start space-x-4">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      modulo.concluido ? "bg-success/10" : "bg-surface"
+                      moduloConcluido ? "bg-success/10" : "bg-surface"
                     }`}>
-                      {modulo.concluido ? (
+                      {moduloConcluido ? (
                         <CheckCircle className="text-success" size={20} />
                       ) : (
                         <span className="text-secondary font-semibold">{index + 1}</span>
@@ -118,8 +178,8 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
                           <h3 className="text-lg font-semibold text-text mb-1">{modulo.titulo}</h3>
                           <p className="text-secondary text-sm">{modulo.descricao}</p>
                         </div>
-                        <Badge variant={modulo.concluido ? "success" : "default"}>
-                          {modulo.concluido ? "Concluído" : "Pendente"}
+                        <Badge variant={moduloConcluido ? "success" : progressoModulo > 0 ? "primary" : "default"}>
+                          {moduloConcluido ? "Concluído" : progressoModulo > 0 ? `${progressoModulo}%` : "Pendente"}
                         </Badge>
                       </div>
 
@@ -138,10 +198,10 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
                         {modulo.topicos.map((topico) => (
                           <Link
                             key={topico.id}
-                            href={`/trilhas/${params.slug}/modulos/${modulo.id}/${topico.tipo}`}
+                            href={getTopicoHref(params.slug, modulo, topico)}
                             className="text-xs px-3 py-1.5 rounded-lg bg-surface hover:bg-card transition-colors"
                           >
-                            {topico.concluido && <CheckCircle size={12} className="inline mr-1 text-success" />}
+                            {topicoConcluido(topico) && <CheckCircle size={12} className="inline mr-1 text-success" />}
                             {topico.titulo}
                           </Link>
                         ))}
@@ -149,7 +209,8 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
                     </div>
                   </div>
                 </Card>
-              ))}
+              );
+              })}
             </div>
           )}
         </div>

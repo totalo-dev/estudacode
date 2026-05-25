@@ -3,9 +3,10 @@
 import { useState, useMemo } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import ProjectCard from "@/components/cards/ProjectCard";
-import { getProjetos, getProjetosByDificuldade } from "@/lib/services/projetos.service";
+import { getProjetos } from "@/lib/services/projetos.service";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
+import { FolderKanban } from "lucide-react";
 import { Difficulty } from "@/lib/types";
 
 type FiltroStatus = "todos" | "em-andamento" | "concluidos" | "novos";
@@ -25,12 +26,14 @@ const filtrosDificuldade: { label: string; value: FiltroDificuldade }[] = [
   { label: "Avançado", value: "avancado" },
 ];
 
+const todosProjetos = getProjetos();
+
 export default function ProjetosPage() {
   const [filtroStatus, setFiltroStatus] = useState<FiltroStatus>("todos");
   const [filtroDificuldade, setFiltroDificuldade] = useState<FiltroDificuldade>("todas");
 
   const projetosFiltrados = useMemo(() => {
-    return getProjetos().filter((p) => {
+    return todosProjetos.filter((p) => {
       const passaStatus =
         filtroStatus === "todos" ||
         (filtroStatus === "em-andamento" && p.progresso > 0 && p.progresso < 100) ||
@@ -57,7 +60,12 @@ export default function ProjetosPage() {
           <p className="text-xs text-secondary uppercase tracking-wider font-medium">Status</p>
           <div className="flex items-center flex-wrap gap-2">
             {filtrosStatus.map((f) => (
-              <button key={f.value} onClick={() => setFiltroStatus(f.value)}>
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => setFiltroStatus(f.value)}
+                aria-pressed={filtroStatus === f.value}
+              >
                 <Badge variant={filtroStatus === f.value ? "primary" : "default"}>
                   {f.label}
                 </Badge>
@@ -71,12 +79,17 @@ export default function ProjetosPage() {
           <p className="text-xs text-secondary uppercase tracking-wider font-medium">Dificuldade</p>
           <div className="flex items-center flex-wrap gap-2">
             {filtrosDificuldade.map((f) => (
-              <button key={f.value} onClick={() => setFiltroDificuldade(f.value)}>
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => setFiltroDificuldade(f.value)}
+                aria-pressed={filtroDificuldade === f.value}
+              >
                 <Badge variant={filtroDificuldade === f.value ? "primary" : "default"}>
                   {f.label}
                   {f.value !== "todas" && (
                     <span className="ml-1.5 opacity-70">
-                      ({projetos.filter((p) => p.dificuldade === f.value).length})
+                      ({todosProjetos.filter((p) => p.dificuldade === f.value).length})
                     </span>
                   )}
                 </Badge>
@@ -99,6 +112,7 @@ export default function ProjetosPage() {
           </div>
         ) : (
           <EmptyState
+            icon={FolderKanban}
             title="Nenhum projeto encontrado"
             description="Não há projetos para os filtros selecionados."
           />

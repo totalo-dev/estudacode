@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
@@ -14,6 +14,16 @@ import { cn } from "@/lib/utils";
 export default function ProjetoPage({ params }: { params: { id: string } }) {
   const projeto = getProjetoById(params.id);
   const [checklist, setChecklist] = useState(projeto?.checklist || []);
+  const [salvo, setSalvo] = useState(false);
+  const [concluido, setConcluido] = useState(false);
+
+  useEffect(() => {
+    if (!projeto) return;
+    const salvoLocal = localStorage.getItem(`estudacode:projeto:${projeto.id}`);
+    if (salvoLocal) {
+      setChecklist(JSON.parse(salvoLocal));
+    }
+  }, [projeto]);
   
   if (!projeto) {
     return <DashboardLayout><div>Projeto não encontrado</div></DashboardLayout>;
@@ -21,13 +31,21 @@ export default function ProjetoPage({ params }: { params: { id: string } }) {
   
   const completedTasks = checklist.filter(item => item.concluido).length;
   const totalTasks = checklist.length;
-  const progress = (completedTasks / totalTasks) * 100;
+  const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
   
   const toggleTask = (taskId: string) => {
     setChecklist(checklist.map(item =>
       item.id === taskId ? { ...item, concluido: !item.concluido } : item
     ));
+    setSalvo(false);
   };
+
+  function salvarProgresso() {
+    if (!projeto) return;
+    localStorage.setItem(`estudacode:projeto:${projeto.id}`, JSON.stringify(checklist));
+    setSalvo(true);
+    setTimeout(() => setSalvo(false), 2500);
+  }
   
   return (
     <DashboardLayout>
@@ -117,9 +135,18 @@ export default function ProjetoPage({ params }: { params: { id: string } }) {
           </div>
         </Card>
         
-        <div className="flex justify-between">
-          <Button variant="outline">Salvar Progresso</Button>
-          <Button variant="primary" disabled={completedTasks < totalTasks}>
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
+          <Button variant="outline" onClick={salvarProgresso}>
+            {salvo ? "Progresso salvo" : "Salvar Progresso"}
+          </Button>
+          <Button
+            variant="primary"
+            disabled={completedTasks < totalTasks}
+            onClick={() => {
+              salvarProgresso();
+              setConcluido(true);
+            }}
+          >
             {completedTasks === totalTasks ? "Marcar como Concluído" : "Concluir Todas as Tarefas"}
           </Button>
         </div>

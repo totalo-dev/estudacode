@@ -9,6 +9,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { getTrilhaBySlug } from "@/lib/services/trilhas.service";
 import { getModulosBySlug } from "@/lib/services/modulos.service";
+import { useProgresso } from "@/lib/hooks/useProgresso";
 
 // Quizzes por módulo — será substituído por banco de dados
 const quizzesPorModulo: Record<string, {
@@ -17,6 +18,20 @@ const quizzesPorModulo: Record<string, {
   respostaCorreta: number;
   explicacao: string;
 }[]> = {
+  "demo-1": [
+    {
+      pergunta: "Qual é o melhor próximo passo depois de ler uma aula?",
+      opcoes: ["Pular para outra trilha", "Praticar o conceito", "Fechar a plataforma", "Trocar o tema"],
+      respostaCorreta: 1,
+      explicacao: "A prática logo após a leitura ajuda a fixar o conteúdo e revela dúvidas cedo.",
+    },
+    {
+      pergunta: "Para que serve marcar progresso?",
+      opcoes: ["Apenas mudar a cor da tela", "Ajudar o app a indicar continuidade", "Bloquear módulos", "Apagar respostas"],
+      respostaCorreta: 1,
+      explicacao: "O progresso permite continuar de onde parou e acompanhar evolução no dashboard.",
+    },
+  ],
   "1": [
     {
       pergunta: "O que é um componente React?",
@@ -102,11 +117,13 @@ export default function QuizPage({ params }: { params: { slug: string; moduloId:
   const [score, setScore] = useState(0);
   const [finalizado, setFinalizado] = useState(false);
   const [respostas, setRespostas] = useState<{ correta: boolean }[]>([]);
+  const { toggleTopico } = useProgresso();
 
   const trilha = getTrilhaBySlug(params.slug);
   const trilhaModulos = getModulosBySlug(params.slug);
   const modulo = trilhaModulos.find((m) => m.id === params.moduloId);
   const questions = quizzesPorModulo[params.moduloId] || quizGenerico;
+  const topicoQuiz = modulo?.topicos.find((t) => t.tipo === "quiz");
 
   const question = questions[currentQuestion];
   const isCorrect = selectedAnswer === question.respostaCorreta;
@@ -131,6 +148,7 @@ export default function QuizPage({ params }: { params: { slug: string; moduloId:
       setSelectedAnswer(null);
       setShowFeedback(false);
     } else {
+      if (topicoQuiz) toggleTopico(topicoQuiz.id, true);
       setFinalizado(true);
     }
   }

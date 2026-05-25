@@ -1,14 +1,27 @@
+"use client";
+
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card            from "@/components/ui/Card";
 import ProgressRing    from "@/components/progress/ProgressRing";
 import TrilhaCard      from "@/components/cards/TrilhaCard";
 import StatsCard       from "@/components/cards/StatsCard";
-import { getTrilhasEmAndamento, getDashboardStats } from "@/lib/services/trilhas.service";
+import { getTrilhas } from "@/lib/services/trilhas.service";
+import { getModulosBySlug } from "@/lib/services/modulos.service";
+import { getProjetos } from "@/lib/services/projetos.service";
+import { useProgresso } from "@/lib/hooks/useProgresso";
 import { Trophy, Target, CheckCircle, type LucideIcon } from "lucide-react";
+import type { Trilha } from "@/lib/types";
+
+interface DashboardStats {
+  progressoGeral: number;
+  trilhasEmAndamento: number;
+  trilhasConcluidas: number;
+  projetosConcluidos: number;
+}
 
 interface StatItem {
   label: string;
-  getValue: (s: ReturnType<typeof getDashboardStats>) => string | number;
+  getValue: (s: DashboardStats) => string | number;
   icon: LucideIcon;
   bgClass: string;
   iconClass: string;
@@ -39,8 +52,35 @@ const STAT_ITEMS: StatItem[] = [
 ];
 
 export default function DashboardPage() {
-  const trilhasEmAndamento = getTrilhasEmAndamento();
-  const stats              = getDashboardStats();
+  const { calcularProgressoModulo } = useProgresso();
+
+  const trilhasComProgresso = getTrilhas().map((trilha): Trilha => {
+    const modulos = getModulosBySlug(trilha.slug);
+    const totalTopicos = modulos.reduce((acc, modulo) => acc + modulo.topicos.length, 0);
+    const progresso = totalTopicos > 0
+      ? Math.round(
+          modulos.reduce((acc, modulo) => {
+            return acc + Math.round((calcularProgressoModulo(modulo) / 100) * modulo.topicos.length);
+          }, 0) / totalTopicos * 100
+        )
+      : trilha.progresso;
+
+    return { ...trilha, progresso };
+  });
+
+  const trilhasEmAndamento = trilhasComProgresso.filter((t) => t.progresso > 0 && t.progresso < 100);
+  const trilhasParaExibir = trilhasEmAndamento.length > 0
+    ? trilhasEmAndamento
+    : trilhasComProgresso.slice(0, 2);
+
+  const stats: DashboardStats = {
+    progressoGeral: trilhasComProgresso.length > 0
+      ? Math.round(trilhasComProgresso.reduce((acc, t) => acc + t.progresso, 0) / trilhasComProgresso.length)
+      : 0,
+    trilhasEmAndamento: trilhasEmAndamento.length,
+    trilhasConcluidas: trilhasComProgresso.filter((t) => t.progresso === 100).length,
+    projetosConcluidos: getProjetos().filter((p) => p.progresso === 100).length,
+  };
 
   return (
     <DashboardLayout>
@@ -68,7 +108,7 @@ export default function DashboardPage() {
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold text-text mb-4">Trilhas em Andamento</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {trilhasEmAndamento.map((trilha) => (
+              {trilhasParaExibir.map((trilha) => (
                 <TrilhaCard key={trilha.id} trilha={trilha} />
               ))}
             </div>

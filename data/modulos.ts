@@ -1,6 +1,36 @@
 import { Modulo } from "@/lib/types";
 
 export const modulos: Record<string, Modulo[]> = {
+  "trilha-demo": [
+    {
+      id: "demo-1",
+      trilhaId: "trilha-demo",
+      ordem: 1,
+      titulo: "Primeiros Passos na Plataforma",
+      descricao: "Conheça o fluxo de estudo com conteúdo, exercício e quiz.",
+      duracaoEstimada: "45min",
+      concluido: false,
+      topicos: [
+        { id: "demo-1-1", moduloId: "demo-1", tipo: "conteudo", titulo: "Como estudar por trilhas", ordem: 1, concluido: false },
+        { id: "demo-1-2", moduloId: "demo-1", tipo: "exercicio", titulo: "Monte seu plano de estudo", ordem: 2, concluido: false },
+        { id: "demo-1-3", moduloId: "demo-1", tipo: "quiz", titulo: "Quiz: Método EstudaCode", ordem: 3, concluido: false },
+      ],
+    },
+    {
+      id: "demo-2",
+      trilhaId: "trilha-demo",
+      ordem: 2,
+      titulo: "Mini Projeto Guiado",
+      descricao: "Finalize a demo criando um pequeno projeto de apresentação.",
+      duracaoEstimada: "1h15",
+      concluido: false,
+      topicos: [
+        { id: "demo-2-1", moduloId: "demo-2", tipo: "conteudo", titulo: "Do conceito ao projeto", ordem: 1, concluido: false },
+        { id: "demo-2-2", moduloId: "demo-2", tipo: "projeto", titulo: "Página de apresentação", ordem: 2, concluido: false },
+      ],
+    },
+  ],
+
   "react-moderno": [
     {
       id: "1",

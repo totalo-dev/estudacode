@@ -16,6 +16,188 @@ export type ConteudoTopico = {
 };
 
 export const conteudoPorTopico: Record<string, ConteudoTopico> = {
+  // Trilha Demo
+  "demo-1-1": {
+    titulo: "Como estudar por trilhas",
+    intro:
+      "A EstudaCode organiza o aprendizado em pequenas etapas: leia o conceito, pratique em seguida e confirme o entendimento com um quiz ou projeto.",
+    callout: {
+      tipo: "success",
+      titulo: "Ritmo recomendado",
+      texto:
+        "Estude em blocos curtos de 25 a 40 minutos e sempre finalize marcando seu progresso. Isso ajuda o dashboard a mostrar o próximo passo.",
+    },
+    topicos: [
+      "Comece pelo conteúdo para entender o objetivo da aula",
+      "Use o exercício para transformar leitura em prática",
+      "Revise o feedback antes de avançar",
+      "Feche ciclos pequenos em vez de acumular tópicos abertos",
+    ],
+    codigo: `const rotina = [
+  "ler o conteúdo",
+  "resolver o exercício",
+  "fazer o quiz",
+  "marcar progresso",
+];
+
+console.log(rotina.join(" -> "));`,
+    linguagem: "javascript",
+    conclusao:
+      "Agora você conhece o fluxo principal. No próximo passo, monte seu primeiro plano de estudo e veja o progresso aparecer na plataforma.",
+  },
+
+  "demo-2-1": {
+    titulo: "Do conceito ao projeto",
+    intro:
+      "Projetos servem para juntar várias habilidades em uma entrega pequena, verificável e fácil de melhorar. Nesta demo, a meta é criar uma página simples de apresentação.",
+    callout: {
+      tipo: "info",
+      titulo: "Projeto pequeno também conta",
+      texto:
+        "Um bom mini projeto tem escopo claro: uma tela, um objetivo e poucos requisitos bem feitos.",
+    },
+    topicos: [
+      "Defina o objetivo antes de escrever código",
+      "Quebre o projeto em requisitos pequenos",
+      "Valide visual, responsividade e leitura",
+      "Publique ou salve uma versão final para comparar sua evolução",
+    ],
+    codigo: `<main>
+  <section>
+    <h1>Olá, eu sou João</h1>
+    <p>Estou aprendendo desenvolvimento web com projetos práticos.</p>
+    <a href="mailto:joao@email.com">Entrar em contato</a>
+  </section>
+</main>`,
+    linguagem: "html",
+    conclusao:
+      "Com um escopo pequeno, fica mais fácil terminar, revisar e evoluir. Agora avance para o projeto da demo.",
+  },
+
+  // Fundamentos Web
+  "fw-1-1": {
+    titulo: "Estrutura do HTML",
+    intro:
+      "HTML é a estrutura da página. Ele define títulos, textos, links, imagens, formulários e regiões semânticas que o navegador e leitores de tela conseguem entender.",
+    callout: {
+      tipo: "info",
+      titulo: "Semântica importa",
+      texto:
+        "Tags como header, main, section e footer descrevem o papel do conteúdo. Isso melhora acessibilidade, SEO e manutenção.",
+    },
+    topicos: [
+      "Documento HTML começa com doctype, html, head e body",
+      "Head concentra metadados, título e links de assets",
+      "Body contém a interface visível",
+      "Tags semânticas comunicam intenção, não apenas aparência",
+    ],
+    codigo: `<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Minha primeira página</title>
+  </head>
+  <body>
+    <header>Meu site</header>
+    <main>
+      <h1>Bem-vindo</h1>
+      <p>Esta é a estrutura base de uma página HTML.</p>
+    </main>
+  </body>
+</html>`,
+    linguagem: "html",
+    conclusao:
+      "Uma boa estrutura HTML deixa a página mais clara para pessoas, navegadores e ferramentas. A próxima etapa aprofunda as tags semânticas.",
+  },
+
+  "fw-2-1": {
+    titulo: "Seletores e Especificidade",
+    intro:
+      "CSS seleciona elementos HTML e aplica estilos. Para manter o código previsível, é essencial entender como seletores competem entre si.",
+    callout: {
+      tipo: "warning",
+      titulo: "Evite brigar com o CSS",
+      texto:
+        "Quando a especificidade fica alta demais, pequenos ajustes exigem seletores cada vez mais complexos. Prefira classes simples e reutilizáveis.",
+    },
+    topicos: [
+      "Seletores de elemento afetam todas as tags daquele tipo",
+      "Classes são boas para estilos reutilizáveis",
+      "IDs têm especificidade alta e devem ser usados com cuidado",
+      "A regra mais específica vence quando há conflito",
+    ],
+    codigo: `.card {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+.card-destaque {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}`,
+    linguagem: "css",
+    conclusao:
+      "Use seletores simples e nomes claros. Isso torna o CSS mais fácil de revisar, reaproveitar e evoluir.",
+  },
+
+  "fw-3-1": {
+    titulo: "Variáveis e Tipos",
+    intro:
+      "JavaScript permite guardar valores em variáveis e trabalhar com tipos como string, number, boolean, array e object.",
+    callout: {
+      tipo: "info",
+      titulo: "Use const por padrão",
+      texto:
+        "Declare com const quando o valor não precisa ser reatribuído. Use let apenas quando a variável realmente mudar.",
+    },
+    topicos: [
+      "String representa texto",
+      "Number representa valores numéricos",
+      "Boolean representa verdadeiro ou falso",
+      "Objetos agrupam dados relacionados",
+    ],
+    codigo: `const nome = "Ana";
+const idade = 24;
+const estudando = true;
+
+const perfil = {
+  nome,
+  idade,
+  estudando,
+};
+
+console.log(perfil.nome);`,
+    linguagem: "javascript",
+    conclusao:
+      "Variáveis bem nomeadas deixam o código mais legível. A próxima aula usa esses valores dentro de funções.",
+  },
+
+  "fw-4-1": {
+    titulo: "CSS Grid",
+    intro:
+      "CSS Grid é ideal para layouts em duas dimensões, controlando linhas e colunas com precisão sem depender de hacks.",
+    callout: {
+      tipo: "success",
+      titulo: "Grid para estrutura",
+      texto:
+        "Use Grid para a estrutura principal da página e Flexbox para alinhar itens dentro de componentes menores.",
+    },
+    topicos: [
+      "grid-template-columns define as colunas",
+      "gap controla o espaço entre itens",
+      "repeat e minmax ajudam na responsividade",
+      "Auto-fit cria grids flexíveis com pouco CSS",
+    ],
+    codigo: `.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}`,
+    linguagem: "css",
+    conclusao:
+      "Com Grid, você cria layouts responsivos com menos código e mais previsibilidade. Em seguida, combine isso com media queries.",
+  },
+
   // React Moderno
   "1-1": {
     titulo: "O que é React?",
