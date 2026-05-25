@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card from "@/components/ui/Card";
 import BadgeCard from "@/components/cards/BadgeCard";
 import ProgressRing from "@/components/progress/ProgressRing";
@@ -72,7 +71,7 @@ export default function PerfilPage() {
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="space-y-8">
         <Card>
           <div className="flex flex-col sm:flex-row items-start gap-6">
@@ -314,6 +313,6 @@ export default function PerfilPage() {
           </div>
         </div>
       )}
-    </DashboardLayout>
+    </>
   );
 }

@@ -61,9 +61,9 @@
 - [ ] `lib/contexts/AuthContext.tsx` — criar contexto de usuário autenticado (nome, email, plano, avatar) para eliminar os hardcodes espalhados
 - [ ] `lib/contexts/NotificacoesContext.tsx` — centralizar estado de notificações entre `DashboardLayout` e `notificacoes/page.tsx`
 - [ ] `app/(platform)/layout.tsx` — criar layout compartilhado para o grupo `(platform)` para evitar importar `DashboardLayout` em cada página
-- [ ] `app/(platform)/suporte/page.tsx` — página de Suporte para todos os planos (criada mas não adicionada à Sidebar)
-- [ ] `app/(platform)/suporte-vip/page.tsx` — página de Suporte VIP para Pro e Vitalício (criada mas não adicionada à Sidebar)
-- [ ] `components/layout/Sidebar.tsx` — adicionar links de Suporte e Suporte VIP condicionais ao plano do usuário
+- [x] `app/(platform)/suporte/page.tsx` — página de Suporte para todos os planos (criada mas não adicionada à Sidebar)
+- [x] `app/(platform)/suporte-vip/page.tsx` — página de Suporte VIP para Pro e Vitalício (criada mas não adicionada à Sidebar)
+- [x] `components/layout/Sidebar.tsx` — adicionar links de Suporte e Suporte VIP condicionais ao plano do usuário
 - [ ] Editor de código real nos exercícios — substituir `<textarea>` simples por Monaco Editor ou CodeMirror
 
 ---

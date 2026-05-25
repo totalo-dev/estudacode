@@ -34,12 +34,12 @@
 - [x] `certificado` — narrowing após `notFound()`
 - [x] `data/conteudo.ts` — tipo `ConteudoTopico` separado do objeto `conteudoPorTopico` (+ conteúdo demo/fw)
 - [x] `/cadastro` — `Suspense` com fallback (parâmetro `?plano=`)
-- [ ] `Sidebar` — logout limpa cookie `estudacode-token`
-- [ ] `notificacoes` — usar `DashboardLayout`
-- [ ] `app/(platform)/layout.tsx` — layout compartilhado (evitar import repetido)
-- [ ] Integrar `useAuth` em trilhas, planos e `TrilhaCard` (cadeado + CTA upgrade)
-- [ ] Certificado: bloquear se trilha não 100% (regra local até Fase 2)
-- [ ] GitHub Actions: `lint` + `tsc` + `build` em PR
+- [x] `Sidebar` + header — logout via `lib/auth/session.ts` (limpa cookie)
+- [x] `notificacoes` — herda shell via `app/(platform)/layout.tsx`
+- [x] `app/(platform)/layout.tsx` + `PlatformShell` (certificado sem sidebar)
+- [x] Integrar `useAuth` em trilhas (demo vs premium), `TrilhaCard` (cadeado → `/planos`)
+- [x] Certificado: bloquear se progresso da trilha for menor que 100%
+- [x] GitHub Actions: `.github/workflows/ci.yml` (`lint` + `tsc` + `build`)
 
 ### Critério de conclusão
 

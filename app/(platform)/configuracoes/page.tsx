@@ -93,6 +93,7 @@ export default function ConfiguracoesPage() {
   ];
 
   return (
+    <>
       <div className="max-w-4xl mx-auto space-y-8">
 
         <div>
@@ -532,5 +533,6 @@ export default function ConfiguracoesPage() {
           </div>
         </div>
       )}
+    </>
   );
 }

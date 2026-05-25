@@ -4,11 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, BookOpen, FolderKanban, User, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, BookOpen, FolderKanban, User, LogOut, Menu, X, HelpCircle, Crown } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/lib/auth/session";
+import { useAuth } from "@/lib/hooks/useAuth";
 
-const navigation = [
+const navigationBase = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Trilhas", href: "/trilhas", icon: BookOpen },
   { name: "Projetos", href: "/projetos", icon: FolderKanban },
@@ -18,6 +19,8 @@ const navigation = [
 export default function Sidebar() {
   const pathname = usePathname();
   const [aberta, setAberta] = useState(false);
+  const { isPro, isVitalicio } = useAuth();
+  const isPremium = isPro || isVitalicio;
 
   const conteudo = (
     <>
@@ -26,7 +29,6 @@ export default function Sidebar() {
           <Image src="/favicon_io/web-app-manifest-192x192.png" alt="EstudaCode" width={32} height={32} className="object-contain" />
           <span className="text-xl font-bold text-text">EstudaCode</span>
         </Link>
-        {/* Botão fechar — só aparece no mobile */}
         <button
           className="md:hidden text-secondary hover:text-text"
           onClick={() => setAberta(false)}
@@ -37,7 +39,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 px-4 space-y-1">
-        {navigation.map((item) => {
+        {navigationBase.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + "/");
           return (
             <Link
@@ -56,6 +58,46 @@ export default function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Separador de suporte */}
+        <div className="pt-2 pb-1">
+          <p className="px-4 text-xs font-semibold text-secondary/50 uppercase tracking-wider">Suporte</p>
+        </div>
+
+        {/* Suporte — todos os planos */}
+        <Link
+          href="/suporte"
+          onClick={() => setAberta(false)}
+          className={cn(
+            "flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors",
+            pathname === "/suporte"
+              ? "bg-primary/10 text-primary"
+              : "text-secondary hover:text-text hover:bg-card"
+          )}
+        >
+          <HelpCircle size={20} />
+          <span className="font-medium">Suporte</span>
+        </Link>
+
+        {/* Suporte VIP — apenas Pro e Vitalício */}
+        {isPremium && (
+          <Link
+            href="/suporte-vip"
+            onClick={() => setAberta(false)}
+            className={cn(
+              "flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors",
+              pathname === "/suporte-vip"
+                ? "bg-yellow-500/10 text-yellow-500"
+                : "text-secondary hover:text-text hover:bg-card"
+            )}
+          >
+            <Crown size={20} className={pathname === "/suporte-vip" ? "text-yellow-500" : ""} />
+            <span className="font-medium">Suporte VIP</span>
+            <span className="ml-auto text-xs font-semibold bg-yellow-500/10 text-yellow-500 px-1.5 py-0.5 rounded-full border border-yellow-500/20">
+              VIP
+            </span>
+          </Link>
+        )}
       </nav>
 
       <div className="p-4 border-t border-card">
