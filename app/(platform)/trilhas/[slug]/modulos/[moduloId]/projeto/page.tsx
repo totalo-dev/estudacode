@@ -7,8 +7,8 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import ProgressBar from "@/components/progress/ProgressBar";
-import { trilhas } from "@/data/trilhas";
-import { modulos } from "@/data/modulos";
+import { getTrilhaBySlug } from "@/lib/services/trilhas.service";
+import { getModulosBySlug } from "@/lib/services/modulos.service";
 
 // Projetos por módulo — será substituído por banco de dados
 const projetosPorModulo: Record<string, {
@@ -172,8 +172,8 @@ const difficultyVariant: Record<string, "default" | "primary" | "success"> = {
 };
 
 export default function ProjetoModuloPage({ params }: { params: { slug: string; moduloId: string } }) {
-  const trilha = trilhas.find((t) => t.slug === params.slug);
-  const trilhaModulos = modulos[params.slug] || [];
+  const trilha = getTrilhaBySlug(params.slug);
+  const trilhaModulos = getModulosBySlug(params.slug);
   const modulo = trilhaModulos.find((m) => m.id === params.moduloId);
   const projeto = projetosPorModulo[params.moduloId];
 

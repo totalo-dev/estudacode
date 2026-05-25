@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import ProjectCard from "@/components/cards/ProjectCard";
-import { projetos } from "@/data/projetos";
+import { getProjetos, getProjetosByDificuldade } from "@/lib/services/projetos.service";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 import { Difficulty } from "@/lib/types";
@@ -30,7 +30,7 @@ export default function ProjetosPage() {
   const [filtroDificuldade, setFiltroDificuldade] = useState<FiltroDificuldade>("todas");
 
   const projetosFiltrados = useMemo(() => {
-    return projetos.filter((p) => {
+    return getProjetos().filter((p) => {
       const passaStatus =
         filtroStatus === "todos" ||
         (filtroStatus === "em-andamento" && p.progresso > 0 && p.progresso < 100) ||

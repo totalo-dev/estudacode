@@ -11,7 +11,7 @@
 
 ```bash
 git clone <repository-url>
-cd "Site Curso"
+cd estudacode
 npm install
 npm run dev
 ```
@@ -31,8 +31,10 @@ npm run lint     # ESLint
 
 ### Convenções de Nomenclatura
 - **Componentes:** PascalCase — `Button.tsx`, `TrilhaCard.tsx`
+- **Serviços:** camelCase com sufixo — `trilhas.service.ts`
 - **Utilitários:** camelCase — `utils.ts`, `types.ts`
 - **Rotas:** kebab-case — `/trilhas/[slug]`
+- **Co-located:** prefixo `_components/` dentro da rota
 
 ### Organização de Imports
 
@@ -41,36 +43,53 @@ npm run lint     # ESLint
 import { useState } from "react";
 import Link from "next/link";
 
-// 2. Componentes
-import Button from "@/components/ui/Button";
+// 2. Componentes — use barrel exports quando importar >1 do mesmo módulo
+import { Button, Badge } from "@/components/ui";
+import TrilhaCard from "@/components/cards/TrilhaCard";
 
-// 3. Dados/utils
-import { trilhas } from "@/data/trilhas";
+// 3. Serviços (nunca importe de data/ diretamente nas páginas)
+import { getTrilhas } from "@/lib/services/trilhas.service";
 import { cn } from "@/lib/utils";
 
 // 4. Tipos
 import type { Trilha } from "@/lib/types";
 ```
 
-## Criando Novos Componentes
+## Service Layer
 
-```tsx
-import { cn } from "@/lib/utils";
+**Regra:** páginas e componentes nunca importam de `data/` diretamente — sempre via `lib/services/`.
 
-interface ComponentProps {
-  className?: string;
-}
-
-export default function Component({ className }: ComponentProps) {
-  return (
-    <div className={cn("base-classes", className)}>
-      {/* Conteúdo */}
-    </div>
-  );
-}
+```
+Páginas (app/)
+    ↓
+lib/services/         ← única porta de acesso aos dados
+    ↓
+data/                 ← substituir por Supabase/API no futuro
 ```
 
-## Trabalhando com Dados
+### Serviços disponíveis
+
+```typescript
+// lib/services/trilhas.service.ts
+getTrilhas(): Trilha[]
+getTrilhaBySlug(slug): Trilha | undefined
+getTrilhasEmAndamento(): Trilha[]
+getTrilhasConcluidas(): Trilha[]
+getTrilhasByDificuldade(dificuldade): Trilha[]
+buscarTrilhas(query): Trilha[]
+getDashboardStats(): { progressoGeral, trilhasEmAndamento, trilhasConcluidas, projetosConcluidos }
+
+// lib/services/modulos.service.ts
+getModulosBySlug(slug): Modulo[]
+getModuloById(slug, moduloId): Modulo | undefined
+getModuloConteudo(slug, moduloId): { modulo, listaModulos, moduloAnterior, moduloProximo, conteudo, progresso } | null
+
+// lib/services/projetos.service.ts
+getProjetos(): Projeto[]
+getProjetoById(id): Projeto | undefined
+buscarProjetos(query): Projeto[]
+getProjetosByDificuldade(dificuldade): Projeto[]
+```
 
 ### Adicionando Nova Trilha
 
@@ -102,13 +121,62 @@ export default function Component({ className }: ComponentProps) {
     duracaoEstimada: "5h",
     concluido: false,
     topicos: [
-      { id: "1-1", moduloId: "1", tipo: "conteudo", titulo: "Tópico 1", ordem: 1, concluido: false },
+      { id: "1-1", moduloId: "1", tipo: "conteudo",  titulo: "Tópico 1",  ordem: 1, concluido: false },
       { id: "1-2", moduloId: "1", tipo: "exercicio", titulo: "Exercício 1", ordem: 2, concluido: false },
-      { id: "1-3", moduloId: "1", tipo: "quiz", titulo: "Quiz 1", ordem: 3, concluido: false },
+      { id: "1-3", moduloId: "1", tipo: "quiz",      titulo: "Quiz 1",    ordem: 3, concluido: false },
     ]
   }
 ]
 ```
+
+## Barrel Exports
+
+Cada pasta de `components/` tem um `index.ts`. Ao importar 2+ componentes da mesma pasta, use o barrel:
+
+```tsx
+// ✅ Correto — caminho curto
+import { Button, Badge, Card } from "@/components/ui";
+import { ProgressBar, ProgressRing } from "@/components/progress";
+
+// ❌ Verboso — ainda funciona mas não é o padrão
+import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
+```
+
+## Criando Novos Componentes
+
+```tsx
+import { cn } from "@/lib/utils";
+
+interface ComponentProps {
+  className?: string;
+}
+
+export default function Component({ className }: ComponentProps) {
+  return (
+    <div className={cn("base-classes", className)}>
+      {/* Conteúdo */}
+    </div>
+  );
+}
+```
+
+Após criar, adicione o export no `index.ts` da pasta correspondente.
+
+## Co-location (_components/)
+
+Componentes usados por **apenas uma rota** vivem em `_components/` dentro da própria rota:
+
+```
+app/(platform)/trilhas/[slug]/modulos/[moduloId]/conteudo/
+├── page.tsx              # Server Component enxuto — orquestra os filhos
+└── _components/
+    ├── ArticleContent.tsx  # "use client" — consome useProgresso
+    ├── ModuleSidebar.tsx   # Server Component
+    └── ModuleTocAside.tsx  # Server Component
+```
+
+Componentes reutilizados em 2+ rotas → mover para `components/`.
 
 ## Estilização
 
@@ -183,7 +251,7 @@ O `layout.tsx` raiz define o template `"%s | EstudaCode"` — basta retornar o t
 
 ### Sitemap e Robots
 
-- `app/sitemap.ts` — gerado automaticamente, inclui trilhas dinâmicas
+- `app/sitemap.ts` — gerado automaticamente, inclui trilhas e posts de blog dinâmicos
 - `app/robots.ts` — bloqueia `/dashboard`, `/perfil`, `/configuracoes`, `/onboarding`, `/busca`
 
 ### JSON-LD (dados estruturados)
@@ -240,8 +308,8 @@ function MeuComponente() {
   // Verificar se está concluído
   const concluido = topicosConcluido("topico-id", false);
 
-  // Calcular progresso de uma lista
-  const pct = calcularProgresso(["id1", "id2", "id3"]);
+  // Calcular progresso percentual de uma lista de tópicos
+  const pct = calcularProgresso(["id1", "id2", "id3"], [false, false, true]);
 }
 ```
 
@@ -274,10 +342,12 @@ import { motion } from "framer-motion";
 ## Boas Práticas
 
 1. Use `"use client"` apenas quando necessário (useState, useEffect, eventos)
-2. Importe de `@/` para paths absolutos
-3. Use `cn()` para merge de classes Tailwind
-4. Sempre defina tipos para props
-5. Evite `any` — use tipos do `lib/types.ts`
+2. Importe dados sempre via `lib/services/`, nunca de `data/` diretamente
+3. Ao importar 2+ componentes da mesma pasta, use o barrel (`@/components/ui`)
+4. Use `cn()` para merge de classes Tailwind
+5. Sempre defina tipos para props
+6. Evite `any` — use tipos do `lib/types.ts`
+7. Componentes de apenas uma rota → `_components/` por co-location
 
 ## Deploy
 
@@ -296,7 +366,7 @@ npm run start
 
 ### Erro: Module not found
 ```bash
-Remove-Item -Recurse -Force node_modules, .next
+rm -rf node_modules .next
 npm install
 ```
 

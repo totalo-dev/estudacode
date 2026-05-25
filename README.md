@@ -33,22 +33,31 @@ estudacode/
 │   ├── layout.tsx                    # Root layout (metadata, SEO, ícones)
 │   ├── page.tsx                      # Landing page pública
 │   ├── not-found.tsx                 # Página 404 customizada
-│   ├── sitemap.ts                    # Sitemap automático
+│   ├── sitemap.ts                    # Sitemap automático com trilhas dinâmicas
 │   ├── robots.ts                     # Robots.txt
 │   ├── globals.css                   # Reset + Tailwind + CSS variables de tema
-│   ├── login/                        # Página de login
-│   ├── cadastro/                     # Página de cadastro
-│   ├── recuperar-senha/              # Recuperação de senha
-│   ├── onboarding/                   # Fluxo de boas-vindas pós-cadastro
-│   ├── planos/                       # Planos e preços com contador e cupons
-│   ├── blog/                         # Listagem e posts individuais do blog
-│   ├── comunidade/                   # Página de comunidade
-│   ├── documentacao/                 # Documentação e FAQ
-│   ├── termos/                       # Termos de uso
-│   ├── privacidade/                  # Política de privacidade
+│   ├── login/
+│   ├── cadastro/
+│   ├── recuperar-senha/
+│   ├── onboarding/
+│   ├── planos/
+│   ├── blog/
+│   ├── comunidade/
+│   ├── documentacao/
+│   ├── termos/
+│   ├── privacidade/
 │   └── (platform)/                   # Rotas autenticadas
 │       ├── dashboard/
 │       ├── trilhas/
+│       │   └── [slug]/
+│       │       └── modulos/
+│       │           └── [moduloId]/
+│       │               └── conteudo/
+│       │                   ├── page.tsx          # Server Component enxuto (44 linhas)
+│       │                   └── _components/      # Co-location: componentes desta rota
+│       │                       ├── ArticleContent.tsx  # Client — progresso via useProgresso
+│       │                       ├── ModuleSidebar.tsx   # Server
+│       │                       └── ModuleTocAside.tsx  # Server
 │       ├── projetos/
 │       ├── perfil/[username]/
 │       ├── busca/
@@ -56,21 +65,70 @@ estudacode/
 │       └── certificado/[slug]/
 │
 ├── components/
-│   ├── layout/     # Navbar, Sidebar (drawer mobile), Footer, DashboardLayout
-│   ├── cards/      # TrilhaCard, ProjectCard, BadgeCard
-│   ├── content/    # CodeBlock, Callout
-│   ├── navigation/ # Breadcrumb, TableOfContents, PaginationNavigation
-│   ├── progress/   # ProgressBar, ProgressRing
-│   ├── sections/   # Hero, Benefits, HowItWorks, Testimonials
-│   └── ui/         # Button, Badge, Card, EmptyState
+│   ├── layout/     # Navbar, Sidebar, Footer, DashboardLayout + index.ts
+│   ├── cards/      # TrilhaCard, ProjectCard, BadgeCard, StatsCard + index.ts
+│   ├── content/    # CodeBlock, Callout + index.ts
+│   ├── navigation/ # Breadcrumb, TableOfContents, PaginationNavigation + index.ts
+│   ├── progress/   # ProgressBar, ProgressRing + index.ts
+│   ├── sections/   # Hero, Benefits, HowItWorks, Testimonials + index.ts
+│   └── ui/         # Button, Badge, Card, EmptyState + index.ts
 │
-├── data/           # Dados mockados (trilhas, módulos, projetos)
+├── data/
+│   ├── trilhas.ts      # Dados mockados de trilhas
+│   ├── modulos.ts      # Dados mockados de módulos
+│   ├── projetos.ts     # Dados mockados de projetos
+│   ├── exercicios.ts   # Dados de exercícios
+│   ├── quizzes.ts      # Dados de quizzes
+│   └── conteudo.ts     # ConteudoTopico + getConteudo()
+│
 ├── lib/
 │   ├── types.ts
 │   ├── utils.ts
-│   └── hooks/useProgresso.ts   # Progresso persistido em localStorage
+│   ├── hooks/
+│   │   └── useProgresso.ts        # Progresso persistido em localStorage
+│   └── services/                  # Service Layer — única porta de acesso aos dados
+│       ├── trilhas.service.ts     # getTrilhas, getTrilhaBySlug, getDashboardStats...
+│       ├── modulos.service.ts     # getModulosBySlug, getModuloConteudo...
+│       └── projetos.service.ts    # getProjetos, getProjetoById...
+│
 └── public/
-    └── favicon_io/             # Ícones da plataforma
+    └── favicon_io/
+```
+
+## 🏗️ Arquitetura
+
+### Service Layer
+Todas as páginas importam dados exclusivamente via `lib/services/`. O `data/` nunca é acessado diretamente pelas páginas — facilitando a troca por chamadas reais ao backend no futuro.
+
+```tsx
+// ✅ Correto
+import { getTrilhas } from "@/lib/services/trilhas.service";
+
+// ❌ Evitar
+import { trilhas } from "@/data/trilhas";
+```
+
+### Barrel Exports
+Cada pasta de `components/` tem um `index.ts`. Use sempre o caminho curto:
+
+```tsx
+// ✅ Correto
+import { Button, Badge } from "@/components/ui";
+
+// ❌ Verboso (ainda funciona)
+import Button from "@/components/ui/Button";
+```
+
+### Co-location
+Componentes usados por apenas uma rota vivem em `_components/` dentro da própria rota:
+
+```
+app/(platform)/trilhas/[slug]/modulos/[moduloId]/conteudo/
+├── page.tsx
+└── _components/
+    ├── ArticleContent.tsx
+    ├── ModuleSidebar.tsx
+    └── ModuleTocAside.tsx
 ```
 
 ## 🎨 Paleta de Cores
@@ -88,7 +146,7 @@ estudacode/
 ## 🚀 Como Executar
 
 ```bash
-cd "Site Curso"
+cd estudacode
 npm install
 npm run dev
 ```
@@ -112,10 +170,10 @@ Acesse **http://localhost:3000**
 - `/privacidade` — Política de privacidade (LGPD)
 
 ### Plataforma (autenticadas)
-- `/dashboard` — Métricas, trilhas em andamento, atividades recentes
+- `/dashboard` — Métricas data-driven, trilhas em andamento, atividades recentes
 - `/trilhas` — Grid com filtros por dificuldade
 - `/trilhas/[slug]` — Trilha com módulos, progresso e link para certificado
-- `/trilhas/[slug]/modulos/[id]/conteudo` — Conteúdo com sidebar e TOC
+- `/trilhas/[slug]/modulos/[id]/conteudo` — Conteúdo com sidebar, TOC e progresso real
 - `/trilhas/[slug]/modulos/[id]/exercicios/[id]` — Exercício com dicas progressivas
 - `/trilhas/[slug]/modulos/[id]/quiz` — Quiz com feedback e tela de resultado
 - `/trilhas/[slug]/modulos/[id]/projeto` — Projeto com checklist interativo
@@ -130,7 +188,7 @@ Acesse **http://localhost:3000**
 
 1. **Autenticação** — NextAuth.js ou Clerk
 2. **Banco de dados** — Supabase (PostgreSQL + Auth + Storage)
-3. **Persistência de progresso** — API Routes + banco
+3. **Persistência de progresso** — API Routes + banco (interface `useProgresso` já preparada)
 4. **Checkout** — Stripe
 5. **Certificados dinâmicos** — Geração com dados reais do usuário
 

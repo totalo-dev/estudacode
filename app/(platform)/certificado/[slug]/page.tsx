@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Download, Share2, CheckCircle, Award } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { trilhas } from "@/data/trilhas";
+import { getTrilhaBySlug } from "@/lib/services/trilhas.service";
 import { getDifficultyLabel } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
@@ -22,7 +22,7 @@ function gerarId(slug: string) {
 }
 
 export default function CertificadoPage({ params }: { params: { slug: string } }) {
-  const trilha = trilhas.find((t) => t.slug === params.slug);
+  const trilha = getTrilhaBySlug(params.slug);
   const certRef = useRef<HTMLDivElement>(null);
 
   if (!trilha) notFound();

@@ -15,6 +15,7 @@ Plataforma premium de aprendizado de programação focada em **prática**, não 
 ## 🏗️ Arquitetura
 
 ### Frontend (Implementado)
+
 - **Framework:** Next.js 14 com App Router
 - **Linguagem:** TypeScript
 - **Estilização:** Tailwind CSS com CSS variables
@@ -23,7 +24,30 @@ Plataforma premium de aprendizado de programação focada em **prática**, não 
 - **SEO:** Metadata API, sitemap.ts, robots.ts
 - **Segurança:** Security headers (CSP, HSTS, X-Frame-Options, Permissions-Policy)
 
+### Camadas da Aplicação
+
+```
+Páginas (app/)
+    ↓ importam de
+Service Layer (lib/services/)
+    ↓ importa de
+Data Layer (data/)     ←  substituir por Supabase/API no backend
+```
+
+**Regra:** páginas nunca importam de `data/` diretamente — sempre via `lib/services/`.
+
+### Padrões Adotados
+
+| Padrão | Onde aplicado |
+|---|---|
+| Service Layer / Repository | `lib/services/*.service.ts` |
+| Co-location | `_components/` por rota |
+| Barrel Export | `index.ts` em cada pasta de `components/` |
+| Single Source of Truth | `useProgresso` lido apenas no componente que o usa |
+| Data-driven UI | `STAT_ITEMS[]` no dashboard, sem markup repetido |
+
 ### Backend (A Implementar)
+
 - **Opção recomendada:** Supabase (PostgreSQL + Auth + Storage)
 - **Autenticação:** NextAuth.js ou Clerk
 - **Pagamentos:** Stripe
@@ -35,6 +59,7 @@ Plataforma premium de aprendizado de programação focada em **prática**, não 
 Trilha       → id, slug, nome, descricao, dificuldade, duracaoEstimada, totalModulos, progresso, cor, icone
 Modulo       → id, trilhaId, ordem, titulo, descricao, duracaoEstimada, concluido, topicos[]
 Topico       → id, moduloId, tipo (conteudo|exercicio|quiz|projeto), titulo, ordem, concluido
+ConteudoTopico → titulo, intro, callout?, topicos[], codigo?, linguagem?, conclusao
 Exercicio    → id, titulo, enunciado, contexto, dicas[], solucao, explicacao
 QuizQuestion → id, pergunta, opcoes[], respostaCorreta, explicacao
 Projeto      → id, titulo, descricao, objetivos[], requisitos[], dificuldade, checklist[], progresso
@@ -63,10 +88,10 @@ UserProgress → trilhasEmAndamento, trilhasConcluidas, projetosConcluidos, exer
 ### Plataforma
 | Rota | Descrição |
 |---|---|
-| `/dashboard` | Métricas e trilhas em andamento |
+| `/dashboard` | Métricas data-driven e trilhas em andamento |
 | `/trilhas` | Grid com filtros por dificuldade |
 | `/trilhas/[slug]` | Trilha com módulos e certificado |
-| `/trilhas/[slug]/modulos/[id]/conteudo` | Conteúdo com sidebar e TOC |
+| `/trilhas/[slug]/modulos/[id]/conteudo` | Conteúdo com sidebar, TOC e progresso real |
 | `/trilhas/[slug]/modulos/[id]/exercicios/[id]` | Exercício com dicas |
 | `/trilhas/[slug]/modulos/[id]/quiz` | Quiz com feedback |
 | `/trilhas/[slug]/modulos/[id]/projeto` | Projeto com checklist |
@@ -90,11 +115,13 @@ UserProgress → trilhasEmAndamento, trilhasConcluidas, projetosConcluidos, exer
    ↓
 5. Acessa trilha → módulo → conteúdo
    ↓
-6. Lê conteúdo → exercício → quiz → projeto
+6. Lê conteúdo → marca como concluído (localStorage)
    ↓
-7. Conclui trilha → recebe certificado
+7. Faz exercício → quiz → projeto
    ↓
-8. Escolhe próxima trilha
+8. Conclui trilha → recebe certificado
+   ↓
+9. Escolhe próxima trilha
 ```
 
 ## 💰 Modelo de Negócio
@@ -117,12 +144,20 @@ Oferta por tempo limitado: 25% OFF nos planos Anual e Vitalício (contador de 48
 
 ## 🚀 Roadmap
 
-### Fase 1: MVP (Atual — Frontend Completo)
-- [x] Design system e componentes
-- [x] Todas as páginas
+### Fase 1: MVP (✅ Concluída)
+- [x] Design system e componentes (40+)
+- [x] Todas as páginas (26+)
 - [x] Dados mockados
 - [x] SEO e segurança
 - [x] Responsividade
+
+### Fase 1.5: Arquitetura (✅ Concluída — Maio 2026)
+- [x] Service Layer (`lib/services/`)
+- [x] Co-location com `_components/`
+- [x] Barrel exports por pasta de componentes
+- [x] Single Source of Truth para progresso (`useProgresso` em ArticleContent)
+- [x] Dashboard data-driven com `StatsCard`
+- [x] `data/conteudo.ts` extraído
 
 ### Fase 2: Backend Core
 - [ ] Autenticação (Supabase + NextAuth)
@@ -166,6 +201,6 @@ Oferta por tempo limitado: 25% OFF nos planos Anual e Vitalício (contador de 48
 
 ---
 
-**Versão:** 1.1.0
-**Última atualização:** Maio 2026
-**Status:** Frontend completo — aguardando backend
+**Versão:** 1.2.0  
+**Última atualização:** Maio 2026  
+**Status:** Frontend completo e arquitetura refatorada — aguardando backend

@@ -5,8 +5,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import TrilhaCard from "@/components/cards/TrilhaCard";
 import ProjectCard from "@/components/cards/ProjectCard";
-import { trilhas } from "@/data/trilhas";
-import { projetos } from "@/data/projetos";
+import { buscarTrilhas, getTrilhas } from "@/lib/services/trilhas.service";
+import { buscarProjetos, getProjetos } from "@/lib/services/projetos.service";
 import { Search, X } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
@@ -34,25 +34,11 @@ export default function BuscaPage() {
   }
 
   const trilhasFiltradas = useMemo(() => {
-    if (!query.trim()) return trilhas;
-    const q = query.toLowerCase();
-    return trilhas.filter(
-      (t) =>
-        t.nome.toLowerCase().includes(q) ||
-        t.descricao.toLowerCase().includes(q) ||
-        t.dificuldade.toLowerCase().includes(q)
-    );
+    return query.trim() ? buscarTrilhas(query) : getTrilhas();
   }, [query]);
 
   const projetosFiltrados = useMemo(() => {
-    if (!query.trim()) return projetos;
-    const q = query.toLowerCase();
-    return projetos.filter(
-      (p) =>
-        p.titulo.toLowerCase().includes(q) ||
-        p.descricao.toLowerCase().includes(q) ||
-        p.dificuldade.toLowerCase().includes(q)
-    );
+    return query.trim() ? buscarProjetos(query) : getProjetos();
   }, [query]);
 
   const totalResultados =

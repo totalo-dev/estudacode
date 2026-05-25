@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ArrowLeft, CheckCircle } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { trilhas } from "@/data/trilhas";
+import { getTrilhas } from "@/lib/services/trilhas.service";
 import { getDifficultyLabel } from "@/lib/utils";
 
 type Etapa = 1 | 2 | 3;
@@ -41,7 +41,7 @@ export default function OnboardingPage() {
   const [nivel, setNivel] = useState("");
   const [trilhaSelecionada, setTrilhaSelecionada] = useState("");
 
-  const trilhasRecomendadas = trilhas.filter((t) =>
+  const trilhasRecomendadas = getTrilhas().filter((t) =>
     nivel ? trilhasPorNivel[nivel]?.includes(t.slug) : true
   );
 

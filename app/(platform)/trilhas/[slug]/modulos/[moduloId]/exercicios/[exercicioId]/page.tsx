@@ -6,8 +6,8 @@ import Card from "@/components/ui/Card";
 import Callout from "@/components/content/Callout";
 import { ChevronLeft, Lightbulb, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
-import { modulos } from "@/data/modulos";
-import { trilhas } from "@/data/trilhas";
+import { getTrilhaBySlug } from "@/lib/services/trilhas.service";
+import { getModulosBySlug } from "@/lib/services/modulos.service";
 
 // Exercícios por módulo — será substituído por banco de dados
 const exerciciosPorModulo: Record<string, {
@@ -117,8 +117,8 @@ export default function ExercicioPage({ params }: { params: { slug: string; modu
   const [userCode, setUserCode] = useState("");
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
-  const trilha = trilhas.find((t) => t.slug === params.slug);
-  const trilhaModulos = modulos[params.slug] || [];
+  const trilha = getTrilhaBySlug(params.slug);
+  const trilhaModulos = getModulosBySlug(params.slug);
   const modulo = trilhaModulos.find((m) => m.id === params.moduloId);
   const exerciciosDoModulo = exerciciosPorModulo[params.moduloId] || exerciciosPorModulo["2"] || [];
   const exercicioIndex = Math.max(0, parseInt(params.exercicioId) - 1);

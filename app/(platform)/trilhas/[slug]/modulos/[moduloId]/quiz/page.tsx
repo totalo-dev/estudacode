@@ -7,8 +7,8 @@ import ProgressBar from "@/components/progress/ProgressBar";
 import { ChevronLeft, CheckCircle, XCircle, Trophy } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { modulos } from "@/data/modulos";
-import { trilhas } from "@/data/trilhas";
+import { getTrilhaBySlug } from "@/lib/services/trilhas.service";
+import { getModulosBySlug } from "@/lib/services/modulos.service";
 
 // Quizzes por módulo — será substituído por banco de dados
 const quizzesPorModulo: Record<string, {
@@ -103,8 +103,8 @@ export default function QuizPage({ params }: { params: { slug: string; moduloId:
   const [finalizado, setFinalizado] = useState(false);
   const [respostas, setRespostas] = useState<{ correta: boolean }[]>([]);
 
-  const trilha = trilhas.find((t) => t.slug === params.slug);
-  const trilhaModulos = modulos[params.slug] || [];
+  const trilha = getTrilhaBySlug(params.slug);
+  const trilhaModulos = getModulosBySlug(params.slug);
   const modulo = trilhaModulos.find((m) => m.id === params.moduloId);
   const questions = quizzesPorModulo[params.moduloId] || quizGenerico;
 

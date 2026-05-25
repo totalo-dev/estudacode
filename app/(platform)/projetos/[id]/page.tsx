@@ -6,13 +6,13 @@ import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ProgressBar from "@/components/progress/ProgressBar";
-import { projetos } from "@/data/projetos";
+import { getProjetoById } from "@/lib/services/projetos.service";
 import { CheckCircle, Circle, Target, Lightbulb } from "lucide-react";
 import { getDifficultyColor, getDifficultyLabel } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 export default function ProjetoPage({ params }: { params: { id: string } }) {
-  const projeto = projetos.find(p => p.id === params.id);
+  const projeto = getProjetoById(params.id);
   const [checklist, setChecklist] = useState(projeto?.checklist || []);
   
   if (!projeto) {

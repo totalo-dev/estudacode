@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import TrilhaCard from "@/components/cards/TrilhaCard";
-import { trilhas } from "@/data/trilhas";
+import { getTrilhas, getTrilhasByDificuldade } from "@/lib/services/trilhas.service";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 import { Difficulty } from "@/lib/types";
@@ -17,13 +17,15 @@ const filtros: { label: string; value: Filtro }[] = [
   { label: "Avançado", value: "avancado" },
 ];
 
+const todasTrilhas = getTrilhas();
+
 export default function TrilhasPage() {
   const [filtroAtivo, setFiltroAtivo] = useState<Filtro>("todas");
 
-  const trilhasFiltradas = useMemo(() => {
-    if (filtroAtivo === "todas") return trilhas;
-    return trilhas.filter((t) => t.dificuldade === filtroAtivo);
-  }, [filtroAtivo]);
+  const trilhasFiltradas = useMemo(
+    () => getTrilhasByDificuldade(filtroAtivo),
+    [filtroAtivo]
+  );
 
   return (
     <DashboardLayout>
@@ -41,7 +43,7 @@ export default function TrilhasPage() {
                 {f.label}
                 {f.value !== "todas" && (
                   <span className="ml-1.5 opacity-70">
-                    ({trilhas.filter((t) => t.dificuldade === f.value).length})
+                    ({todasTrilhas.filter((t) => t.dificuldade === f.value).length})
                   </span>
                 )}
               </Badge>

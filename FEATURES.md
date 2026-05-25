@@ -29,18 +29,19 @@
 - [x] Contraste WCAG AA/AAA
 - [x] Landmarks semânticos
 
-## 🧩 Componentes (35+)
+## 🧩 Componentes (40+)
 
 ### Layout
 - [x] Navbar (responsiva, hamburger mobile, logo clicável)
 - [x] Sidebar (drawer mobile com overlay, botão fechar)
 - [x] Footer (links reais para todas as páginas)
-- [x] DashboardLayout (busca funcional, popup de perfil, toggle tema removido)
+- [x] DashboardLayout (busca funcional, popup de perfil)
 
 ### Cards
 - [x] TrilhaCard com progresso
 - [x] ProjectCard com checklist
 - [x] BadgeCard (conquistada vs bloqueada)
+- [x] **StatsCard** — card reutilizável para métricas (icon, label, value, bgClass, iconClass)
 
 ### Conteúdo
 - [x] CodeBlock com copy-to-clipboard
@@ -67,6 +68,11 @@
 - [x] HowItWorks (timeline 4 passos)
 - [x] Testimonials (6 depoimentos com stagger)
 
+### Co-located (_components/)
+- [x] **ArticleContent** — Client Component, consome `useProgresso` diretamente
+- [x] **ModuleSidebar** — Server Component, lista de módulos da trilha
+- [x] **ModuleTocAside** — Server Component, wrap do TableOfContents
+
 ## 📄 Páginas (26+)
 
 ### Públicas
@@ -84,10 +90,10 @@
 - [x] 404 customizada
 
 ### Plataforma
-- [x] Dashboard
+- [x] Dashboard (data-driven via `getDashboardStats()`, cards com `StatsCard`)
 - [x] Trilhas (filtros por dificuldade funcionais)
 - [x] Trilha individual (módulos, progresso, link certificado)
-- [x] Conteúdo do módulo (dados reais, sidebar, TOC)
+- [x] Conteúdo do módulo (sidebar, TOC, progresso real, botão "Marcar concluído")
 - [x] Exercício (dicas progressivas, verificação real)
 - [x] Quiz (perguntas reais por módulo, tela de resultado)
 - [x] Projeto do módulo (checklist, recursos, tela de conclusão)
@@ -100,8 +106,8 @@
 
 ## 🎯 Funcionalidades
 
-- [x] Filtros de trilhas por dificuldade (funcionais)
-- [x] Filtros de projetos por status e dificuldade (funcionais)
+- [x] Filtros de trilhas por dificuldade
+- [x] Filtros de projetos por status e dificuldade
 - [x] Busca global com URL (`/busca?q=...`)
 - [x] Popup de perfil com navegação e logout
 - [x] Upload de avatar com preview e drag & drop
@@ -114,7 +120,21 @@
 - [x] Toggle mensal/anual nos planos
 - [x] Onboarding com recomendação de trilha por nível
 - [x] Certificado com impressão e Web Share API
-- [x] Hook `useProgresso` com localStorage
+- [x] Hook `useProgresso` com localStorage (interface pronta para API)
+- [x] **Botão "Marcar como concluído"** no conteúdo do módulo com toggle visual
+
+## 🏗️ Arquitetura (Refatoração Maio 2026)
+
+- [x] **Service Layer** — `lib/services/` como única porta de acesso aos dados
+  - `trilhas.service.ts` — `getTrilhas`, `getTrilhaBySlug`, `getDashboardStats`, etc.
+  - `modulos.service.ts` — `getModuloConteudo`, `getModulosBySlug`, etc.
+  - `projetos.service.ts` — `getProjetos`, `getProjetoById`, etc.
+- [x] **Zero imports diretos** de `data/` nas páginas (verificado com grep)
+- [x] **`data/conteudo.ts`** — tipo `ConteudoTopico` e `getConteudo()` extraídos da page
+- [x] **Barrel exports** — `index.ts` em todas as 7 pastas de componentes
+- [x] **Co-location** — `_components/` por rota (conteudo page: 44 linhas vs. 312 originais)
+- [x] **Single Source of Truth** — `ArticleContent` calcula progresso internamente via hook
+- [x] **Dashboard data-driven** — `STAT_ITEMS[]` elimina repetição dos 3 blocos de card
 
 ## 🛠️ Técnico
 
@@ -124,12 +144,12 @@
 - [x] Security headers (CSP, HSTS, X-Frame-Options, Permissions-Policy)
 - [x] `poweredByHeader: false`
 - [x] Metadata API (title template, OpenGraph, Twitter Cards)
-- [x] `sitemap.ts` com rotas dinâmicas
+- [x] `sitemap.ts` com rotas dinâmicas de trilhas e blog
 - [x] `robots.ts` com rotas bloqueadas
 - [x] Imports absolutos (@/)
 - [x] Compressão HTTP + otimização de imagens (avif/webp)
 
-## 📚 Documentação (9 arquivos)
+## 📚 Documentação (10 arquivos)
 
 - [x] README.md
 - [x] SUMMARY.md
@@ -140,13 +160,15 @@
 - [x] PROJECT_OVERVIEW.md
 - [x] INSTALLATION.md
 - [x] INDEX.md
+- [x] SUGGESTIONS.md
+- [x] **FUTURE_PLANNING.md** ← novo
 
 ## 🚧 Pendente (requer backend)
 
 - [ ] Autenticação real (NextAuth.js / Clerk)
 - [ ] Persistência de progresso no servidor
 - [ ] Checkout Stripe
-- [ ] Dashboard com dados reais
+- [ ] Dashboard com dados reais de usuário
 - [ ] Perfil com dados reais
 - [ ] Certificados gerados dinamicamente
 - [ ] Notificações funcionais
@@ -155,5 +177,6 @@
 
 ---
 
-**Status:** ✅ Frontend completo  
+**Status:** ✅ Frontend completo — arquitetura refatorada  
+**Versão:** 1.2.0  
 **Última atualização:** Maio 2026

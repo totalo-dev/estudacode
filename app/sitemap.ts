@@ -1,10 +1,10 @@
 import { MetadataRoute } from "next";
-import { trilhas } from "@/data/trilhas";
+import { getTrilhas } from "@/lib/services/trilhas.service";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://estudacode.com.br";
 
-  const trilhaRoutes = trilhas.map((t) => ({
+  const trilhaRoutes = getTrilhas().map((t) => ({
     url: `${base}/trilhas/${t.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,

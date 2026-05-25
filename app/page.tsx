@@ -5,7 +5,7 @@ import Benefits from "@/components/sections/Benefits";
 import HowItWorks from "@/components/sections/HowItWorks";
 import Testimonials from "@/components/sections/Testimonials";
 import TrilhaCard from "@/components/cards/TrilhaCard";
-import { trilhas } from "@/data/trilhas";
+import { getTrilhas } from "@/lib/services/trilhas.service";
 import Button from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -31,7 +31,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {trilhas.slice(0, 6).map((trilha) => (
+            {getTrilhas().slice(0, 6).map((trilha) => (
               <TrilhaCard key={trilha.id} trilha={trilha} />
             ))}
           </div>

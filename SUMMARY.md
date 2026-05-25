@@ -2,7 +2,7 @@
 
 ## 🎯 O Que Foi Entregue
 
-Uma plataforma educacional premium completa de programação, focada em aprendizado prático através de conteúdo escrito, exercícios, quizzes e projetos reais. Frontend 100% implementado com dados mockados.
+Uma plataforma educacional premium completa de programação, focada em aprendizado prático através de conteúdo escrito, exercícios, quizzes e projetos reais. Frontend 100% implementado, dados mockados e arquitetura refatorada para facilitar a integração com backend.
 
 ## ✅ Entregas Completas
 
@@ -20,10 +20,10 @@ Uma plataforma educacional premium completa de programação, focada em aprendiz
 - Página 404 customizada
 
 ### Páginas da Plataforma (14)
-- Dashboard com métricas e trilhas em andamento
+- Dashboard com métricas data-driven e trilhas em andamento
 - Trilhas com filtros por dificuldade
 - Trilha individual com módulos, progresso e link para certificado
-- Conteúdo do módulo (layout 3 colunas responsivo)
+- Conteúdo do módulo (layout 3 colunas, progresso real, botão "Marcar concluído")
 - Exercício com dicas progressivas e verificação real
 - Quiz com feedback imediato e tela de resultado
 - Projeto do módulo com checklist interativo
@@ -34,24 +34,34 @@ Uma plataforma educacional premium completa de programação, focada em aprendiz
 - Configurações (perfil, senha, notificações, conta)
 - Certificado visual com impressão e compartilhamento
 
-### Componentes (35+)
+### Componentes (40+)
 - **Layout**: Navbar, Sidebar (drawer mobile), Footer, DashboardLayout
-- **Cards**: TrilhaCard, ProjectCard, BadgeCard
+- **Cards**: TrilhaCard, ProjectCard, BadgeCard, **StatsCard**
+- **Co-located**: ArticleContent, ModuleSidebar, ModuleTocAside
 - **Conteúdo**: CodeBlock (copy), Callout (4 tipos)
 - **Navegação**: Breadcrumb, TableOfContents, PaginationNavigation
 - **Progresso**: ProgressBar, ProgressRing
 - **Seções**: Hero, Benefits, HowItWorks, Testimonials
 - **UI**: Button, Badge, Card, EmptyState
 
+### Arquitetura (Refatoração Maio 2026)
+- **Service Layer** (`lib/services/`) — única porta de acesso aos dados
+- **Zero acoplamento** — nenhuma página importa de `data/` diretamente
+- **Barrel exports** — `index.ts` em todas as 7 pastas de `components/`
+- **Co-location** — `_components/` por rota (conteudo page: 44 linhas vs. 312 antes)
+- **Single Source of Truth** — `useProgresso` lido apenas em `ArticleContent`
+- **Dashboard data-driven** — `STAT_ITEMS[]` elimina markup repetido
+
 ### Dados Mockados
 - 6 trilhas com slug, ícone, cor, dificuldade, progresso
 - Módulos completos para todas as 6 trilhas
 - 3 projetos com checklist
 - Exercícios e quizzes por módulo (react-moderno completo)
+- Conteúdo de tópico em `data/conteudo.ts`
 
 ### SEO e Segurança
 - Metadata API com title template, OpenGraph, Twitter Cards
-- `sitemap.ts` com todas as rotas públicas e trilhas dinâmicas
+- `sitemap.ts` com todas as rotas públicas, trilhas e posts de blog dinâmicos
 - `robots.ts` bloqueando rotas privadas
 - Security headers no `next.config.js` (CSP, HSTS, X-Frame-Options, etc.)
 - `poweredByHeader: false`
@@ -74,10 +84,12 @@ Uma plataforma educacional premium completa de programação, focada em aprendiz
 ## 📊 Métricas
 
 - **Páginas:** 26+
-- **Componentes:** 35+
+- **Componentes:** 40+
 - **Trilhas:** 6 (todas com módulos)
 - **Rotas dinâmicas:** 8
-- **Arquivos de documentação:** 9
+- **Arquivos de documentação:** 11
+- **Arquivos de serviço:** 3
+- **Barrel exports:** 7
 
 ## 🚧 Próximos Passos (requer backend)
 
@@ -99,6 +111,7 @@ Uma plataforma educacional premium completa de programação, focada em aprendiz
 
 ---
 
-**Status:** ✅ Frontend completo — pronto para integração com backend  
+**Status:** ✅ Frontend completo — arquitetura refatorada — pronto para integração com backend  
+**Versão:** 1.2.0  
 **Data:** Maio 2026  
 **Desenvolvido por:** EstudaCode Team

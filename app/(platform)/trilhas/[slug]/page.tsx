@@ -3,15 +3,15 @@ import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ProgressBar from "@/components/progress/ProgressBar";
-import { trilhas } from "@/data/trilhas";
-import { modulos } from "@/data/modulos";
+import { getTrilhaBySlug } from "@/lib/services/trilhas.service";
+import { getModulosBySlug } from "@/lib/services/modulos.service";
 import { Clock, BookOpen, CheckCircle, Circle, Play, Award } from "lucide-react";
 import { getDifficultyColor, getDifficultyLabel } from "@/lib/utils";
 import Link from "next/link";
 
 export default function TrilhaPage({ params }: { params: { slug: string } }) {
-  const trilha = trilhas.find(t => t.slug === params.slug);
-  const trilhaModulos = modulos[params.slug] || [];
+  const trilha = getTrilhaBySlug(params.slug);
+  const trilhaModulos = getModulosBySlug(params.slug);
 
   if (!trilha) {
     return <DashboardLayout><div>Trilha não encontrada</div></DashboardLayout>;
