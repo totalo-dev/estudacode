@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import ProjectCard from "@/components/cards/ProjectCard";
 import { getProjetos } from "@/lib/services/projetos.service";
 import Badge from "@/components/ui/Badge";
@@ -48,7 +47,6 @@ export default function ProjetosPage() {
   }, [filtroStatus, filtroDificuldade]);
 
   return (
-    <DashboardLayout>
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-text mb-2">Projetos Práticos</h1>
@@ -118,6 +116,5 @@ export default function ProjetosPage() {
           />
         )}
       </div>
-    </DashboardLayout>
   );
 }

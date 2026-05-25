@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, BookOpen, FolderKanban, User, LogOut, Menu, X } from "lucide-react";
 import Image from "next/image";
+import { logout } from "@/lib/auth/session";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -59,7 +60,8 @@ export default function Sidebar() {
 
       <div className="p-4 border-t border-card">
         <button
-          onClick={() => { window.location.href = "/login"; }}
+          type="button"
+          onClick={() => logout()}
           className="flex items-center space-x-3 px-4 py-3 rounded-lg text-secondary hover:text-text hover:bg-card transition-colors w-full"
         >
           <LogOut size={20} />

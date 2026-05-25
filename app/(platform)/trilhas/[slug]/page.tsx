@@ -1,6 +1,5 @@
 "use client";
 
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -36,12 +35,11 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
   const { plano } = useAuth();
 
   if (!trilha) {
-    return <DashboardLayout><div>Trilha não encontrada</div></DashboardLayout>;
+    return <div>Trilha não encontrada</div>;
   }
 
   if (!temAcesso(plano, trilha.planoNecessario)) {
     return (
-      <DashboardLayout>
         <div className="max-w-2xl mx-auto">
           <Card>
             <div className="text-center py-8">
@@ -61,7 +59,6 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
             </div>
           </Card>
         </div>
-      </DashboardLayout>
     );
   }
 
@@ -80,7 +77,6 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
   const proximoModulo = trilhaModulos.find((m) => !moduloConcluidoEfetivo(m)) || trilhaModulos[0];
 
   return (
-    <DashboardLayout>
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
           <div className="flex-1">
@@ -215,6 +211,5 @@ export default function TrilhaPage({ params }: { params: { slug: string } }) {
           )}
         </div>
       </div>
-    </DashboardLayout>
   );
 }

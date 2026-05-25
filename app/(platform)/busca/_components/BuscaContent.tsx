@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import TrilhaCard from "@/components/cards/TrilhaCard";
 import ProjectCard from "@/components/cards/ProjectCard";
 import { buscarTrilhas, getTrilhas } from "@/lib/services/trilhas.service";
@@ -51,7 +50,6 @@ export default function BuscaContent() {
   const mostrarProjetos = filtro === "tudo" || filtro === "projetos";
 
   return (
-    <DashboardLayout>
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-text mb-2">Busca</h1>
@@ -155,6 +153,5 @@ export default function BuscaContent() {
           />
         )}
       </div>
-    </DashboardLayout>
   );
 }

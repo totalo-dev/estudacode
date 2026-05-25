@@ -64,7 +64,11 @@ export default function TrilhaCard({ trilha, bloqueada = false }: TrilhaCardProp
   );
 
   if (bloqueada) {
-    return <div>{inner}</div>;
+    return (
+      <Link href="/planos" className="block" aria-label={`Fazer upgrade para acessar ${trilha.nome}`}>
+        {inner}
+      </Link>
+    );
   }
 
   return <Link href={`/trilhas/${trilha.slug}`}>{inner}</Link>;

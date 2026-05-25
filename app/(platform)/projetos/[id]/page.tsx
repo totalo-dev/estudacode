@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -26,7 +25,7 @@ export default function ProjetoPage({ params }: { params: { id: string } }) {
   }, [projeto]);
   
   if (!projeto) {
-    return <DashboardLayout><div>Projeto não encontrado</div></DashboardLayout>;
+    return <div>Projeto não encontrado</div>;
   }
   
   const completedTasks = checklist.filter(item => item.concluido).length;
@@ -48,7 +47,6 @@ export default function ProjetoPage({ params }: { params: { id: string } }) {
   }
   
   return (
-    <DashboardLayout>
       <div className="max-w-5xl mx-auto space-y-8">
         <div>
           <div className="flex items-center space-x-3 mb-4">
@@ -151,6 +149,5 @@ export default function ProjetoPage({ params }: { params: { id: string } }) {
           </Button>
         </div>
       </div>
-    </DashboardLayout>
   );
 }

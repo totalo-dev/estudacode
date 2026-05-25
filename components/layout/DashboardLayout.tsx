@@ -7,6 +7,7 @@ import Sidebar from "./Sidebar";
 import { Bell, Search, User, Settings, LogOut, BookOpen, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useAvatar } from "@/lib/hooks/useAvatar";
+import { logout } from "@/lib/auth/session";
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
@@ -241,10 +242,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <div className="border-t border-card" />
                     <div className="py-2">
                       <button
-                        onClick={() => { 
-                          setPerfilAberto(false); 
-                          document.cookie = "estudacode-token=; path=/; max-age=0";
-                          window.location.href = "/login";
+                        type="button"
+                        onClick={() => {
+                          setPerfilAberto(false);
+                          logout();
                         }}
                         className="flex items-center space-x-3 w-full px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-colors"
                       >

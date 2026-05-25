@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Bell, CheckCircle2, Check } from "lucide-react";
 import Button from "@/components/ui/Button";
 
@@ -60,7 +59,6 @@ export default function NotificacoesPage() {
   }
 
   return (
-    <DashboardLayout>
       <div className="max-w-3xl mx-auto space-y-6">
 
         {/* Cabeçalho */}
@@ -142,6 +140,5 @@ export default function NotificacoesPage() {
           </div>
         )}
       </div>
-    </DashboardLayout>
   );
 }

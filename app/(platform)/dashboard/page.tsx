@@ -1,6 +1,5 @@
 "use client";
 
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card            from "@/components/ui/Card";
 import ProgressRing    from "@/components/progress/ProgressRing";
 import TrilhaCard      from "@/components/cards/TrilhaCard";
@@ -83,7 +82,6 @@ export default function DashboardPage() {
   };
 
   return (
-    <DashboardLayout>
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-text mb-2">Bem-vindo de volta! 👋</h1>
@@ -152,6 +150,5 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
   );
 }

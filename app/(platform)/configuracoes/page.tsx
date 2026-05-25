@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { User, Lock, Bell, Trash2, CheckCircle, Eye, EyeOff, Camera, X, Upload } from "lucide-react";
@@ -94,7 +93,6 @@ export default function ConfiguracoesPage() {
   ];
 
   return (
-    <DashboardLayout>
       <div className="max-w-4xl mx-auto space-y-8">
 
         <div>
@@ -534,6 +532,5 @@ export default function ConfiguracoesPage() {
           </div>
         </div>
       )}
-    </DashboardLayout>
   );
 }
