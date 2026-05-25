@@ -89,14 +89,14 @@ export default function DashboardPage() {
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-success rounded-full mt-2" />
                   <div className="flex-1">
-                    <p className="text-text text-sm">Completou "Hooks Avançados"</p>
+                    <p className="text-text text-sm">Completou Hooks Avançados</p>
                     <p className="text-secondary text-xs">Há 2 horas</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-primary rounded-full mt-2" />
                   <div className="flex-1">
-                    <p className="text-text text-sm">Iniciou "Context API"</p>
+                    <p className="text-text text-sm">Iniciou Context API</p>
                     <p className="text-secondary text-xs">Há 5 horas</p>
                   </div>
                 </div>
