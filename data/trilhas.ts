@@ -1,6 +1,22 @@
 import { Trilha } from "@/lib/types";
 
 export const trilhas: Trilha[] = [
+  // ── Trilha Demo — acesso gratuito ──────────────────────────────────────────
+  {
+    id: "0",
+    slug: "trilha-demo",
+    nome: "Trilha Demo",
+    descricao: "Experimente a plataforma gratuitamente. Conheça o formato das aulas, exercícios e quizzes antes de assinar.",
+    dificuldade: "iniciante",
+    duracaoEstimada: "2h",
+    totalModulos: 2,
+    progresso: 0,
+    cor: "#6366F1",
+    icone: "🎓",
+    planoNecessario: "gratis",
+  },
+
+  // ── Trilhas Pro / Vitalício ────────────────────────────────────────────────
   {
     id: "1",
     slug: "fundamentos-web",
@@ -12,6 +28,7 @@ export const trilhas: Trilha[] = [
     progresso: 0,
     cor: "#3B82F6",
     icone: "🌐",
+    planoNecessario: "pro",
   },
   {
     id: "2",
@@ -24,6 +41,7 @@ export const trilhas: Trilha[] = [
     progresso: 0,
     cor: "#10B981",
     icone: "⚛️",
+    planoNecessario: "pro",
   },
   {
     id: "3",
@@ -36,6 +54,7 @@ export const trilhas: Trilha[] = [
     progresso: 0,
     cor: "#8B5CF6",
     icone: "📘",
+    planoNecessario: "pro",
   },
   {
     id: "4",
@@ -45,9 +64,10 @@ export const trilhas: Trilha[] = [
     dificuldade: "avancado",
     duracaoEstimada: "80h",
     totalModulos: 15,
-    progresso: 20,
+    progresso: 0,
     cor: "#F59E0B",
     icone: "▲",
+    planoNecessario: "pro",
   },
   {
     id: "5",
@@ -60,6 +80,7 @@ export const trilhas: Trilha[] = [
     progresso: 0,
     cor: "#10B981",
     icone: "🟢",
+    planoNecessario: "pro",
   },
   {
     id: "6",
@@ -72,5 +93,6 @@ export const trilhas: Trilha[] = [
     progresso: 0,
     cor: "#EC4899",
     icone: "🎨",
+    planoNecessario: "pro",
   },
 ];

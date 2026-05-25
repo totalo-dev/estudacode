@@ -1,4 +1,5 @@
 export type Difficulty = "iniciante" | "intermediario" | "avancado";
+export type PlanoUsuario = "gratis" | "pro" | "vitalicio";
 
 export interface Trilha {
   id: string;
@@ -11,6 +12,8 @@ export interface Trilha {
   progresso: number;
   cor: string;
   icone: string;
+  /** Plano mínimo necessário para acessar a trilha */
+  planoNecessario: PlanoUsuario;
 }
 
 export interface Modulo {
