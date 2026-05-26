@@ -34,9 +34,17 @@ export default function TrilhaCard({ trilha, bloqueada = false }: TrilhaCardProp
         >
           {trilha.icone}
         </div>
-        <Badge variant={trilha.progresso > 0 ? "primary" : "default"}>
-          {trilha.progresso > 0 ? `${trilha.progresso}%` : "Novo"}
-        </Badge>
+        {trilha.planoNecessario === "gratis" ? (
+          <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-success/10 text-success border border-success/20">
+            ✦ Grátis
+          </span>
+        ) : trilha.progresso > 0 ? (
+          <Badge variant="primary">{trilha.progresso}%</Badge>
+        ) : (
+          <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+            ⚡ Pro
+          </span>
+        )}
       </div>
 
       <h3 className="text-xl font-semibold text-text mb-2">{trilha.nome}</h3>
