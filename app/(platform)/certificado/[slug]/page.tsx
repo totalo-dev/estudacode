@@ -11,6 +11,7 @@ import { getModulosBySlug } from "@/lib/services/modulos.service";
 import { getDifficultyLabel } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import { useProgresso } from "@/lib/hooks/useProgresso";
+import { useAuthContext } from "@/lib/contexts/AuthContext";
 
 const DATA_CONCLUSAO = new Date().toLocaleDateString("pt-BR", {
   day: "2-digit",
@@ -41,6 +42,7 @@ export default function CertificadoPage({ params }: { params: { slug: string } }
   const trilhaEncontrada = getTrilhaBySlug(params.slug);
   const certRef = useRef<HTMLDivElement>(null);
   const { topicoConcluido } = useProgresso();
+  const { nome } = useAuthContext();
 
   const progressoTrilha = useMemo(
     () => (trilhaEncontrada ? calcularProgressoTrilha(params.slug, topicoConcluido) : 0),
@@ -155,7 +157,7 @@ export default function CertificadoPage({ params }: { params: { slug: string } }
 
               <div className="my-8">
                 <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                  Usuário EstudaCode
+                  {nome}
                 </p>
                 <div className="mt-3 h-px w-64 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto" />
               </div>

@@ -7,6 +7,7 @@ import ProgressRing from "@/components/progress/ProgressRing";
 import { Trophy, Target, CheckCircle, Code, Calendar, Camera, X, Upload } from "lucide-react";
 import Image from "next/image";
 import { useAvatar } from "@/lib/hooks/useAvatar";
+import { useAuthContext } from "@/lib/contexts/AuthContext";
 
 const badges = [
   { id: "1", nome: "Primeiro Passo", descricao: "Completou o primeiro módulo", icone: "🎯", conquistado: true, dataConquista: "15 Mai 2026" },
@@ -26,6 +27,7 @@ const recentActivity = [
 
 export default function PerfilPage() {
   const { avatarUrl, setAvatarUrl } = useAvatar();
+  const { nome, username } = useAuthContext();
   const [modalAberto, setModalAberto] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [arrastando, setArrastando] = useState(false);
@@ -104,8 +106,8 @@ export default function PerfilPage() {
             </div>
 
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-2xl md:text-3xl font-bold text-text mb-2">Usuário</h1>
-              <p className="text-secondary mb-4 text-sm">Desenvolvedor em formação • Membro desde Mai 2026</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-text mb-2">{nome}</h1>
+              <p className="text-secondary mb-4 text-sm">@{username} • Desenvolvedor em formação • Membro desde Mai 2026</p>
 
               <div className="flex items-center justify-center sm:justify-start flex-wrap gap-4 text-sm">
                 <div>

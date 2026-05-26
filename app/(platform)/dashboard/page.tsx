@@ -8,6 +8,7 @@ import { getTrilhas } from "@/lib/services/trilhas.service";
 import { getModulosBySlug } from "@/lib/services/modulos.service";
 import { getProjetos } from "@/lib/services/projetos.service";
 import { useProgresso } from "@/lib/hooks/useProgresso";
+import { useAuthContext } from "@/lib/contexts/AuthContext";
 import { Trophy, Target, CheckCircle, type LucideIcon } from "lucide-react";
 import type { Trilha } from "@/lib/types";
 
@@ -52,6 +53,10 @@ const STAT_ITEMS: StatItem[] = [
 
 export default function DashboardPage() {
   const { calcularProgressoModulo } = useProgresso();
+  const { nome } = useAuthContext();
+
+  // Primeiro nome para a saudação
+  const primeiroNome = nome.split(" ")[0];
 
   const trilhasComProgresso = getTrilhas().map((trilha): Trilha => {
     const modulos = getModulosBySlug(trilha.slug);
@@ -84,7 +89,7 @@ export default function DashboardPage() {
   return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-text mb-2">Bem-vindo de volta! 👋</h1>
+          <h1 className="text-3xl font-bold text-text mb-2">Bem-vindo de volta, {primeiroNome}! 👋</h1>
           <p className="text-secondary">Continue de onde parou e alcance seus objetivos</p>
         </div>
 

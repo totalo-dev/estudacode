@@ -8,6 +8,7 @@ import { Bell, Search, User, Settings, LogOut, BookOpen, ChevronRight } from "lu
 import Image from "next/image";
 import { useAvatar } from "@/lib/hooks/useAvatar";
 import { logout } from "@/lib/auth/session";
+import { useAuthContext } from "@/lib/contexts/AuthContext";
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
@@ -17,6 +18,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [buscaValor, setBuscaValor] = useState("");
   const [notificacoesAberto, setNotificacoesAberto] = useState(false);
   const { avatarUrl } = useAvatar();
+  const { nome, email } = useAuthContext();
   
   const [listaNotificacoes, setListaNotificacoes] = useState([
     {
@@ -209,8 +211,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-text font-semibold truncate">Usuário</p>
-                          <p className="text-secondary text-xs truncate">usuario@email.com</p>
+                          <p className="text-text font-semibold truncate">{nome}</p>
+                          <p className="text-secondary text-xs truncate">{email}</p>
                         </div>
                       </div>
                     </div>

@@ -6,20 +6,20 @@
 
 ## 🔴 Bugs
 
-- [ ] `app/(platform)/projetos/page.tsx` — variável `projetos` usada na contagem de dificuldade não está importada (quebra em runtime)
-- [ ] `components/layout/Sidebar.tsx` — botão "Sair" não limpa o cookie `estudacode-token`, causando loop de redirecionamento pelo middleware
+- [x] `app/(platform)/projetos/page.tsx` — variável `projetos` usada na contagem de dificuldade não está importada (quebra em runtime)
+- [x] `components/layout/Sidebar.tsx` — botão "Sair" não limpa o cookie `estudacode-token`, causando loop de redirecionamento pelo middleware
 
 ---
 
 ## 🟠 Fluxos quebrados / incompletos
 
-- [ ] `app/login/page.tsx` — botões de login social (Google, GitHub, Facebook, X) sem `onClick`
-- [ ] `app/cadastro/page.tsx` — botões de cadastro social (Google, GitHub) sem `onClick`
-- [ ] `app/cadastro/page.tsx` — parâmetro `?plano=pro` e `?plano=vitalicio` na URL é ignorado; cadastro não pré-seleciona o plano
-- [ ] `app/(platform)/notificacoes/page.tsx` — não usa `DashboardLayout`; renderiza sem sidebar e header da plataforma
+- [x] `app/login/page.tsx` — botões de login social (Google, GitHub, Facebook, X) sem `onClick`
+- [x] `app/cadastro/page.tsx` — botões de cadastro social (Google, GitHub, Facebook, X) sem `onClick` e sem ícones
+- [x] `app/cadastro/page.tsx` — parâmetro `?plano=pro` e `?plano=vitalicio` na URL é ignorado; cadastro não pré-seleciona o plano
+- [x] `app/(platform)/notificacoes/page.tsx` — não usa `DashboardLayout`; renderiza sem sidebar e header da plataforma
 - [ ] `app/(platform)/certificado/[slug]/page.tsx` — acessível sem ter concluído a trilha; qualquer URL funciona
-- [ ] `app/(platform)/trilhas/page.tsx` — separar seção "Trilha Demo" das trilhas Pro/Vitalício com controle de acesso via `useAuth`
-- [ ] `app/(platform)/trilhas/page.tsx` — trilhas bloqueadas devem exibir cadeado e CTA de upgrade (integrar `TrilhaCard` com prop `bloqueada`)
+- [x] `app/(platform)/trilhas/page.tsx` — separar seção "Trilha Demo" das trilhas Pro/Vitalício com controle de acesso via `useAuth`
+- [x] `app/(platform)/trilhas/page.tsx` — trilhas bloqueadas exibem cadeado e CTA de upgrade via `TrilhaCard` com prop `bloqueada`
 
 ---
 

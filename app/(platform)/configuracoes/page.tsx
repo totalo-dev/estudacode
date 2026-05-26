@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import { User, Lock, Bell, Trash2, CheckCircle, Eye, EyeOff, Camera, X, Upload } from "lucide-react";
 import Image from "next/image";
 import { useAvatar } from "@/lib/hooks/useAvatar";
+import { useAuthContext } from "@/lib/contexts/AuthContext";
 
 type Aba = "perfil" | "senha" | "notificacoes" | "conta";
 
@@ -16,6 +17,7 @@ export default function ConfiguracoesPage() {
   const [showNovaSenha, setShowNovaSenha] = useState(false);
   const [showConfirmar, setShowConfirmar] = useState(false);
   const { avatarUrl, setAvatarUrl } = useAvatar();
+  const { nome: nomeCtx, email: emailCtx, username: usernameCtx, atualizarPerfil } = useAuthContext();
 
   // Modal de avatar
   const [modalAvatarAberto, setModalAvatarAberto] = useState(false);
