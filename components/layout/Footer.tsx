@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <Image src="/favicon_io/android-chrome-192x192.png" alt="EstudaCode" width={32} height={32} className="object-contain" />
+              <Image src="/favicon_io/web-app-manifest-192x192.png" alt="EstudaCode" width={32} height={32} className="object-contain" />
               <span className="text-xl font-bold text-text">EstudaCode</span>
             </div>
             <p className="text-secondary text-sm">

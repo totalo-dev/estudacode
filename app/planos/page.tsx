@@ -377,13 +377,20 @@ export default function PlanosPage() {
 
                   {/* CTA */}
                   <Link href={plano.href} className="mb-6">
-                    <Button
-                      variant={plano.destaque ? "primary" : "outline"}
-                      size="md"
-                      className="w-full"
-                    >
-                      {plano.cta}
-                    </Button>
+                    {plano.id === "vitalicio" ? (
+                      <button className="w-full px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500 text-black hover:brightness-110 hover:shadow-lg hover:shadow-yellow-500/30 flex items-center justify-center gap-2">
+                        <Crown size={16} />
+                        {plano.cta}
+                      </button>
+                    ) : (
+                      <Button
+                        variant={plano.destaque ? "primary" : "outline"}
+                        size="md"
+                        className="w-full"
+                      >
+                        {plano.cta}
+                      </Button>
+                    )}
                   </Link>
 
                   {/* Recursos */}
