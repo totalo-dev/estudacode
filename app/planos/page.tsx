@@ -259,16 +259,18 @@ export default function PlanosPage() {
           </div>
 
           {/* Toggle mensal/anual */}
-          <div className="flex items-center justify-center space-x-4 mb-12">
+          <div className="flex items-center justify-center gap-3 mb-12 flex-wrap">
             <span className={`text-sm font-medium ${ciclo === "mensal" ? "text-text" : "text-secondary"}`}>
               Mensal
             </span>
             <button
               onClick={() => setCiclo(ciclo === "mensal" ? "anual" : "mensal")}
-              className={`relative w-12 h-6 rounded-full transition-colors overflow-hidden ${
+              className={`relative w-12 h-6 rounded-full transition-colors flex-shrink-0 ${
                 ciclo === "anual" ? "bg-primary" : "bg-card"
               }`}
               aria-label="Alternar ciclo de cobrança"
+              aria-checked={ciclo === "anual"}
+              role="switch"
             >
               <span
                 className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${
@@ -276,9 +278,9 @@ export default function PlanosPage() {
                 }`}
               />
             </button>
-            <span className={`text-sm font-medium ${ciclo === "anual" ? "text-text" : "text-secondary"}`}>
+            <span className={`text-sm font-medium flex items-center gap-2 ${ciclo === "anual" ? "text-text" : "text-secondary"}`}>
               Anual
-              <span className="ml-2 text-xs bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded-full font-semibold">
+              <span className="text-xs bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
                 -25%
               </span>
             </span>

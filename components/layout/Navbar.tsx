@@ -50,6 +50,9 @@ export default function Navbar() {
             <Link href="/projetos" className="text-secondary hover:text-text transition-colors">
               Projetos
             </Link>
+            <Link href="/planos" className="text-secondary hover:text-text transition-colors">
+              Planos
+            </Link>
             <Link href="/dashboard" className="text-secondary hover:text-text transition-colors">
               Dashboard
             </Link>
@@ -175,6 +178,9 @@ export default function Navbar() {
             </Link>
             <Link href="/projetos" className="block text-secondary hover:text-text transition-colors">
               Projetos
+            </Link>
+            <Link href="/planos" className="block text-secondary hover:text-text transition-colors">
+              Planos
             </Link>
             <Link href="/dashboard" className="block text-secondary hover:text-text transition-colors">
               Dashboard
