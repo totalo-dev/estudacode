@@ -259,31 +259,32 @@ export default function PlanosPage() {
           </div>
 
           {/* Toggle mensal/anual */}
-          <div className="flex items-center justify-center gap-3 mb-12 flex-wrap">
-            <span className={`text-sm font-medium ${ciclo === "mensal" ? "text-text" : "text-secondary"}`}>
-              Mensal
-            </span>
-            <button
-              onClick={() => setCiclo(ciclo === "mensal" ? "anual" : "mensal")}
-              className={`relative w-12 h-6 rounded-full transition-colors flex-shrink-0 ${
-                ciclo === "anual" ? "bg-primary" : "bg-card"
-              }`}
-              aria-label="Alternar ciclo de cobrança"
-              aria-checked={ciclo === "anual"}
-              role="switch"
-            >
-              <span
-                className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${
-                  ciclo === "anual" ? "translate-x-7" : "translate-x-1"
+          <div className="flex items-center justify-center mb-12">
+            <div className="inline-flex items-center bg-card rounded-xl p-1 gap-1">
+              <button
+                onClick={() => setCiclo("mensal")}
+                className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  ciclo === "mensal"
+                    ? "bg-surface text-text shadow-sm"
+                    : "text-secondary hover:text-text"
                 }`}
-              />
-            </button>
-            <span className={`text-sm font-medium flex items-center gap-2 ${ciclo === "anual" ? "text-text" : "text-secondary"}`}>
-              Anual
-              <span className="text-xs bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
-                -25%
-              </span>
-            </span>
+              >
+                Mensal
+              </button>
+              <button
+                onClick={() => setCiclo("anual")}
+                className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  ciclo === "anual"
+                    ? "bg-surface text-text shadow-sm"
+                    : "text-secondary hover:text-text"
+                }`}
+              >
+                Anual
+                <span className="text-xs bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded-full font-semibold">
+                  -25%
+                </span>
+              </button>
+            </div>
           </div>
 
           {/* Cards de planos */}
