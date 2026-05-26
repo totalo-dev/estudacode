@@ -192,7 +192,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     {avatarUrl ? (
                       <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                     ) : (
-                      "U"
+                      (nome?.[0] ?? "U").toUpperCase()
                     )}
                   </div>
                 </button>
@@ -207,7 +207,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           {avatarUrl ? (
                             <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                           ) : (
-                            "U"
+                            (nome?.[0] ?? "U").toUpperCase()
                           )}
                         </div>
                         <div className="min-w-0">

@@ -69,8 +69,13 @@ export default function ConfiguracoesPage() {
   const [showModalConfirmacao, setShowModalConfirmacao] = useState(false);
   const [emailExclusaoEnviado, setEmailExclusaoEnviado] = useState(false);
 
-  // Perfil
-  const [perfil, setPerfil] = useState({ nome: "Usuário", email: "usuario@email.com", bio: "", username: "usuario" });
+  // Perfil — inicializado com dados reais do AuthContext
+  const [perfil, setPerfil] = useState({
+    nome: nomeCtx,
+    email: emailCtx,
+    bio: "",
+    username: usernameCtx,
+  });
 
   // Notificações
   const [notif, setNotif] = useState({
@@ -82,7 +87,14 @@ export default function ConfiguracoesPage() {
 
   function handleSalvar(e: React.FormEvent) {
     e.preventDefault();
-    // Persistência será implementada com o backend
+    // Persiste nome, email e username no AuthContext (e no localStorage via atualizarPerfil)
+    if (abaAtiva === "perfil") {
+      atualizarPerfil({
+        nome: perfil.nome,
+        email: perfil.email,
+        username: perfil.username,
+      });
+    }
     setSalvo(true);
     setTimeout(() => setSalvo(false), 3000);
   }
@@ -148,7 +160,7 @@ export default function ConfiguracoesPage() {
                         {avatarUrl ? (
                           <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                         ) : (
-                          "U"
+                          (perfil.nome?.[0] ?? "U").toUpperCase()
                         )}
                       </div>
                       <button
@@ -231,7 +243,7 @@ export default function ConfiguracoesPage() {
                     {avatarUrl ? (
                       <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                     ) : (
-                      "U"
+                      (perfil.nome?.[0] ?? "U").toUpperCase()
                     )}
                   </div>
                   <div>

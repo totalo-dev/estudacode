@@ -89,7 +89,7 @@ export default function PerfilPage() {
                   <Image src={avatarUrl} alt="Foto de perfil" fill className="object-cover" />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-3xl font-bold">
-                    U
+                    {(nome?.[0] ?? "U").toUpperCase()}
                   </div>
                 )}
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
