@@ -46,7 +46,6 @@ const secoes = [
     links: [
       { label: "Editar perfil", href: "/configuracoes" },
       { label: "Alterar senha", href: "/configuracoes" },
-      { label: "Notificações", href: "/configuracoes" },
     ],
   },
 ];
