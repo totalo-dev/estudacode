@@ -1,74 +1,93 @@
 # 📊 Resumo Executivo — EstudaCode
 
+> Versão 1.6.0 — Maio 2026
+
 ## 🎯 O Que Foi Entregue
 
-Uma plataforma educacional premium completa de programação, focada em aprendizado prático através de conteúdo escrito, exercícios, quizzes e projetos reais. Frontend 100% implementado, dados mockados e arquitetura refatorada para facilitar a integração com backend.
+Uma plataforma educacional premium completa de programação, focada em aprendizado prático. Frontend 100% implementado com sistema de autenticação mock, controle de acesso por plano, contexto de usuário e arquitetura preparada para integração com backend.
 
-## ✅ Entregas Completas
+---
 
-### Páginas Públicas (12)
-- Landing page com Hero, Benefits, HowItWorks, Testimonials, grid de trilhas e CTA
-- Login com e-mail/senha e social (Google, GitHub, Facebook, X)
-- Cadastro com validação de senha e social login
-- Recuperação de senha com estado de sucesso
-- Onboarding em 3 etapas (objetivo → nível → trilha recomendada)
-- Planos Grátis/Pro/Vitalício com contador de oferta 48h, desconto 25% e cupons
-- Blog com listagem e posts individuais (conteúdo real no post de React Hooks)
-- Comunidade (Discord, GitHub, X)
-- Documentação com guias e FAQ
-- Termos de Uso e Política de Privacidade (LGPD)
-- Página 404 customizada
+## ✅ Entregas por Fase
 
-### Páginas da Plataforma (14)
-- Dashboard com métricas data-driven e trilhas em andamento
-- Trilhas com filtros por dificuldade
-- Trilha individual com módulos, progresso e link para certificado
-- Conteúdo do módulo (layout 3 colunas, progresso real, botão "Marcar concluído")
-- Exercício com dicas progressivas e verificação real
-- Quiz com feedback imediato e tela de resultado
-- Projeto do módulo com checklist interativo
-- Projetos com filtros por status e dificuldade
-- Projeto individual com checklist
-- Perfil com upload de avatar (drag & drop)
-- Busca global com parâmetro de URL
-- Configurações (perfil, senha, notificações, conta)
-- Certificado visual com impressão e compartilhamento
+### Fase 1 — MVP
+- 28+ páginas implementadas (públicas + plataforma)
+- 40+ componentes reutilizáveis
+- Design system dark mode com CSS variables
+- SEO completo (Metadata API, sitemap, robots, OpenGraph)
+- Security headers (CSP, HSTS, X-Frame-Options)
+- Responsividade mobile-first
 
-### Componentes (40+)
-- **Layout**: Navbar, Sidebar (drawer mobile), Footer, DashboardLayout
-- **Cards**: TrilhaCard, ProjectCard, BadgeCard, **StatsCard**
-- **Co-located**: ArticleContent, ModuleSidebar, ModuleTocAside
-- **Conteúdo**: CodeBlock (copy), Callout (4 tipos)
-- **Navegação**: Breadcrumb, TableOfContents, PaginationNavigation
-- **Progresso**: ProgressBar, ProgressRing
-- **Seções**: Hero, Benefits, HowItWorks, Testimonials
-- **UI**: Button, Badge, Card, EmptyState
+### Fase 1.5 — Arquitetura
+- Service Layer (`lib/services/`) — única porta de acesso aos dados
+- Zero acoplamento: nenhuma página importa de `data/` diretamente
+- Barrel exports em todas as 7 pastas de componentes
+- Co-location com `_components/` por rota
+- Dashboard data-driven com `STAT_ITEMS[]`
+- `data/conteudo.ts` extraído com `getConteudo()`
 
-### Arquitetura (Refatoração Maio 2026)
-- **Service Layer** (`lib/services/`) — única porta de acesso aos dados
-- **Zero acoplamento** — nenhuma página importa de `data/` diretamente
-- **Barrel exports** — `index.ts` em todas as 7 pastas de `components/`
-- **Co-location** — `_components/` por rota (conteudo page: 44 linhas vs. 312 antes)
-- **Single Source of Truth** — `useProgresso` lido apenas em `ArticleContent`
-- **Dashboard data-driven** — `STAT_ITEMS[]` elimina markup repetido
+### Fase 1.6 — Auth Mock + UX + Controle de Acesso
+- `AuthContext` com nome, email, username, plano e `atualizarPerfil`
+- `useAuth` hook para controle de acesso por plano
+- `lib/auth/session.ts` com `logout()` correto
+- Trilha Demo (grátis) separada das trilhas Pro na página de trilhas
+- Cadeado nas trilhas bloqueadas com CTA de upgrade
+- Badges "Grátis" (verde) e "Pro" (azul) nos cards de trilha
+- Certificado bloqueado se progresso < 100%
+- Suporte e Suporte VIP na Sidebar (condicional ao plano)
+- Botões sociais com `onClick` e loading state no login e cadastro
+- Cadastro lê `?plano=` e exibe banner do plano selecionado
+- Debounce de 300ms na busca
+- Modal de avatar inline nas configurações
+- Notificações com marcar lida individual e em massa
+- Seletor mensal/anual nos planos (pill-style, sem overflow)
+- Botão Vitalício com gradiente dourado e ícone Crown
+- Logo do Footer corrigido
+- Link "Planos" adicionado ao Navbar
 
-### Dados Mockados
-- 6 trilhas com slug, ícone, cor, dificuldade, progresso
-- Módulos completos para todas as 6 trilhas
-- 3 projetos com checklist
-- Exercícios e quizzes por módulo (react-moderno completo)
-- Conteúdo de tópico em `data/conteudo.ts`
+---
 
-### SEO e Segurança
-- Metadata API com title template, OpenGraph, Twitter Cards
-- `sitemap.ts` com todas as rotas públicas, trilhas e posts de blog dinâmicos
-- `robots.ts` bloqueando rotas privadas
-- Security headers no `next.config.js` (CSP, HSTS, X-Frame-Options, etc.)
-- `poweredByHeader: false`
+## 📊 Métricas Atuais
 
-### Hook de Progresso
-- `lib/hooks/useProgresso.ts` — persiste em localStorage
-- Interface pronta para substituição por API
+| Item | Quantidade |
+|---|---|
+| Páginas | 28+ |
+| Componentes | 40+ |
+| Trilhas | 7 (1 demo + 6 pro) |
+| Módulos com dados | 25+ |
+| Tópicos com conteúdo real | ~12 |
+| Projetos | 3 |
+| Rotas dinâmicas | 8 |
+| Arquivos de documentação | 11 |
+| Serviços | 3 |
+| Hooks | 4 (useProgresso, useAuth, useAvatar, useAuthContext) |
+| Contextos | 1 (AuthContext) |
+
+---
+
+## 🗂️ Estrutura de Dados (Mock)
+
+| Arquivo | Conteúdo |
+|---|---|
+| `data/trilhas.ts` | 7 trilhas com `planoNecessario` |
+| `data/modulos.ts` | Módulos para todas as 7 trilhas |
+| `data/conteudo.ts` | ~12 tópicos com conteúdo real + fallback genérico |
+| `data/projetos.ts` | 3 projetos com checklist |
+
+---
+
+## 🔐 Sistema de Autenticação (Mock)
+
+| Dado | Armazenamento |
+|---|---|
+| Sessão (logado/deslogado) | Cookie `estudacode-token` |
+| Plano do usuário | `localStorage estudacode:plano` |
+| Nome, email, username | `localStorage estudacode:user` |
+| Progresso de tópicos/módulos | `localStorage estudacode:progresso` |
+| Avatar | `localStorage estudacode-avatar` |
+| Expiração da oferta | `localStorage estudacode:oferta_expira` |
+
+---
 
 ## 🚀 Tecnologias
 
@@ -81,37 +100,30 @@ Uma plataforma educacional premium completa de programação, focada em aprendiz
 | Ícones | Lucide React |
 | Utilitários | clsx + tailwind-merge |
 
-## 📊 Métricas
+---
 
-- **Páginas:** 26+
-- **Componentes:** 40+
-- **Trilhas:** 6 (todas com módulos)
-- **Rotas dinâmicas:** 8
-- **Arquivos de documentação:** 11
-- **Arquivos de serviço:** 3
-- **Barrel exports:** 7
+## 🚧 O Que Falta (Priorizado)
 
-## 🚧 Próximos Passos (requer backend)
+### Sem backend (pode ser feito agora)
+1. Checklist de projetos persistindo no localStorage
+2. Onboarding salvando preferências no localStorage
+3. `NotificacoesContext` — sincronizar estado entre layout e página
+4. Editor de código real (Monaco/CodeMirror)
+5. Conteúdo real para os 5 posts de blog restantes
+6. Conteúdo real para todos os tópicos das trilhas
 
-### Curto prazo
-1. Autenticação real (NextAuth.js ou Clerk)
-2. Supabase — banco + auth + storage
-3. Persistência de progresso via API
-
-### Médio prazo
-4. Checkout Stripe
-5. Dashboard e perfil com dados reais
-6. Certificados gerados dinamicamente
-7. Notificações funcionais
-
-### Longo prazo
-8. Fórum/comunidade integrado
-9. Sistema de comentários por módulo
-10. Analytics de aprendizado
+### Requer backend
+1. Autenticação real (Supabase + NextAuth.js ou Clerk)
+2. Persistência de progresso via API
+3. Checkout Stripe (planos Pro e Vitalício)
+4. Dashboard e perfil com dados reais
+5. Certificados com data e ID reais
+6. Notificações funcionais
+7. Upload de avatar para storage
+8. Envio de e-mails (confirmação, recuperação de senha)
 
 ---
 
-**Status:** ✅ Frontend completo — arquitetura refatorada — pronto para integração com backend  
-**Versão:** 1.2.0  
-**Data:** Maio 2026  
-**Desenvolvido por:** EstudaCode Team
+**Status:** ✅ Frontend completo com auth mock e controle de acesso — pronto para integração com backend
+**Versão:** 1.6.0
+**Data:** Maio 2026

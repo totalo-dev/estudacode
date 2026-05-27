@@ -1,56 +1,57 @@
 # ✅ TODO — Front-end EstudaCode
 
 > Tarefas pendentes de front-end. Itens que dependem de backend estão marcados com 🔌.
+> Última atualização: Mai 2026
 
 ---
 
 ## 🔴 Bugs
 
-- [x] `app/(platform)/projetos/page.tsx` — variável `projetos` usada na contagem de dificuldade não está importada (quebra em runtime)
-- [x] `components/layout/Sidebar.tsx` — botão "Sair" não limpa o cookie `estudacode-token`, causando loop de redirecionamento pelo middleware
+- [x] `app/(platform)/projetos/page.tsx` — variável `projetos` não importada (já corrigido: usa `todosProjetos`)
+- [x] `components/layout/Sidebar.tsx` — botão "Sair" não limpava cookie (corrigido via `logout()` de `lib/auth/session.ts`)
 
 ---
 
 ## 🟠 Fluxos quebrados / incompletos
 
-- [x] `app/login/page.tsx` — botões de login social (Google, GitHub, Facebook, X) sem `onClick`
-- [x] `app/cadastro/page.tsx` — botões de cadastro social (Google, GitHub, Facebook, X) sem `onClick` e sem ícones
-- [x] `app/cadastro/page.tsx` — parâmetro `?plano=pro` e `?plano=vitalicio` na URL é ignorado; cadastro não pré-seleciona o plano
-- [x] `app/(platform)/notificacoes/page.tsx` — não usa `DashboardLayout`; renderiza sem sidebar e header da plataforma
-- [ ] `app/(platform)/certificado/[slug]/page.tsx` — acessível sem ter concluído a trilha; qualquer URL funciona
-- [x] `app/(platform)/trilhas/page.tsx` — separar seção "Trilha Demo" das trilhas Pro/Vitalício com controle de acesso via `useAuth`
-- [x] `app/(platform)/trilhas/page.tsx` — trilhas bloqueadas exibem cadeado e CTA de upgrade via `TrilhaCard` com prop `bloqueada`
+- [x] `app/login/page.tsx` — botões de login social com `onClick` e loading state
+- [x] `app/cadastro/page.tsx` — botões sociais com ícones (Google, GitHub, Facebook, X)
+- [x] `app/cadastro/page.tsx` — lê `?plano=` da URL e exibe banner do plano selecionado
+- [x] `app/(platform)/notificacoes/page.tsx` — usa `DashboardLayout`, marcar lida individual e em massa
+- [x] `app/(platform)/trilhas/page.tsx` — seção Demo separada das Pro, cadeado nas bloqueadas
+- [x] `app/(platform)/certificado/[slug]/page.tsx` — bloqueia acesso se progresso < 100%
+- [ ] `app/(platform)/onboarding/page.tsx` — seleções de objetivo e nível não são salvas 🔌
 
 ---
 
 ## 🟡 Dados hardcoded que devem ser dinâmicos
 
-- [ ] Nome "Usuário" e email "usuario@email.com" hardcoded em `DashboardLayout`, `Sidebar`, `Perfil` e `Certificado` — aguarda `AuthContext`
-- [ ] Dashboard — "Atividades Recentes" é array estático inline; deve vir do histórico real do usuário
-- [ ] Dashboard — saudação "Bem-vindo de volta!" não usa o nome real do usuário
-- [ ] `getDashboardStats()` — `projetosConcluidos: 8` hardcoded no serviço
-- [ ] Perfil — todas as estatísticas hardcoded (47 exercícios, 12 quizzes, 7 dias de sequência, 3 projetos, 127 horas, 2 badges)
-- [ ] Perfil — array `badges` fixo (2 conquistadas, 4 não)
-- [ ] Perfil — array `recentActivity` fixo com 4 atividades
-- [ ] Perfil — `ProgressRing` com `value={45}` fixo
-- [ ] Certificado — nome do aluno fixo "Usuário EstudaCode"
-- [ ] Certificado — data de conclusão sempre `new Date()` (data atual, não a real)
-- [ ] Certificado — ID gerado com `Math.random()`, muda a cada render
-- [ ] Notificações — array de 4 notificações estático inline; duplicado entre `DashboardLayout` e `notificacoes/page.tsx`
-- [ ] Conteúdo de módulo — `TOC_ITEMS` hardcoded com 4 itens fixos, não gerado a partir do conteúdo real
+- [x] Nome/email do usuário — resolvido via `AuthContext` (persiste em localStorage)
+- [x] Dashboard — saudação usa primeiro nome real do usuário
+- [x] Perfil — exibe nome e username do `AuthContext`
+- [x] Certificado — exibe nome real do usuário
+- [x] Configurações — formulário inicializado com dados reais, salva via `atualizarPerfil`
+- [ ] Dashboard — "Atividades Recentes" ainda é array estático inline 🔌
+- [ ] `getDashboardStats()` — `projetosConcluidos` hardcoded como 8 🔌
+- [ ] Perfil — estatísticas hardcoded (47 exercícios, 12 quizzes, 7 dias, 3 projetos, 127h, 2 badges) 🔌
+- [ ] Perfil — array `badges` fixo (2 conquistadas, 4 não) 🔌
+- [ ] Perfil — array `recentActivity` fixo com 4 atividades 🔌
+- [ ] Perfil — `ProgressRing` com `value={45}` fixo 🔌
+- [ ] Certificado — data de conclusão sempre `new Date()` (não a data real) 🔌
+- [ ] Certificado — ID gerado com `Math.random()`, muda a cada render 🔌
+- [ ] Notificações — array duplicado entre `DashboardLayout` e `notificacoes/page.tsx` 🔌
+- [ ] Conteúdo de módulo — TOC hardcoded; conteúdo real só para ~12 tópicos, demais usam fallback
 
 ---
 
 ## 🟡 Funcionalidades sem ação (botões mortos)
 
-- [ ] `configuracoes/page.tsx` aba Perfil — `handleSalvar` não persiste nada 🔌
-- [ ] `configuracoes/page.tsx` aba Senha — campos não são controlados (sem `value`/`onChange`); submit não faz nada 🔌
-- [ ] `configuracoes/page.tsx` aba Notificações — toggles funcionam localmente mas não persistem no reload 🔌
+- [x] `configuracoes/page.tsx` aba Perfil — salva nome/email/username no `AuthContext` e localStorage
+- [ ] `configuracoes/page.tsx` aba Senha — campos sem `value`/`onChange`; submit não faz nada 🔌
+- [ ] `configuracoes/page.tsx` aba Notificações — toggles não persistem no reload 🔌
 - [ ] `configuracoes/page.tsx` aba Conta — botão "Solicitar exportação" sem `onClick` 🔌
-- [ ] `configuracoes/page.tsx` aba Conta — fluxo de exclusão de conta completo visualmente mas sem ação real 🔌
-- [ ] `projetos/[id]/page.tsx` — botão "Salvar Progresso" sem `onClick`
-- [ ] `projetos/[id]/page.tsx` — checklist perde estado ao recarregar (só em React state)
-- [ ] `onboarding/page.tsx` — seleções de objetivo e nível não são salvas em lugar nenhum
+- [ ] `configuracoes/page.tsx` aba Conta — exclusão de conta sem ação real 🔌
+- [ ] `projetos/[id]/page.tsx` — botão "Salvar Progresso" sem `onClick`; checklist perde estado no reload
 - [ ] `comunidade/page.tsx` — links do Discord, GitHub e Twitter apontam para `#`
 - [ ] Certificado — botão "Baixar PDF" chama `window.print()`, não gera PDF real 🔌
 
@@ -58,28 +59,46 @@
 
 ## 🟢 Componentes / contextos faltando
 
-- [ ] `lib/contexts/AuthContext.tsx` — criar contexto de usuário autenticado (nome, email, plano, avatar) para eliminar os hardcodes espalhados
-- [ ] `lib/contexts/NotificacoesContext.tsx` — centralizar estado de notificações entre `DashboardLayout` e `notificacoes/page.tsx`
-- [ ] `app/(platform)/layout.tsx` — criar layout compartilhado para o grupo `(platform)` para evitar importar `DashboardLayout` em cada página
-- [x] `app/(platform)/suporte/page.tsx` — página de Suporte para todos os planos (criada mas não adicionada à Sidebar)
-- [x] `app/(platform)/suporte-vip/page.tsx` — página de Suporte VIP para Pro e Vitalício (criada mas não adicionada à Sidebar)
-- [x] `components/layout/Sidebar.tsx` — adicionar links de Suporte e Suporte VIP condicionais ao plano do usuário
-- [ ] Editor de código real nos exercícios — substituir `<textarea>` simples por Monaco Editor ou CodeMirror
+- [x] `lib/contexts/AuthContext.tsx` — criado, conectado em Dashboard, Perfil, Certificado, Configurações, DashboardLayout
+- [x] `app/(platform)/suporte/page.tsx` — criado e na Sidebar
+- [x] `app/(platform)/suporte-vip/page.tsx` — criado e na Sidebar (condicional ao plano)
+- [ ] `lib/contexts/NotificacoesContext.tsx` — estado de notificações duplicado entre layout e página
+- [ ] `app/(platform)/layout.tsx` — layout compartilhado para o grupo `(platform)`
+- [ ] Editor de código real nos exercícios — substituir `<textarea>` por Monaco Editor ou CodeMirror
 
 ---
 
 ## 🔵 Conteúdo incompleto
 
 - [ ] Blog — 5 de 6 posts sem conteúdo real (exibem "Artigo em breve")
-- [ ] Trilha Demo — criar módulos e conteúdo real em `data/modulos.ts` para o slug `trilha-demo`
-- [ ] Exercícios e quizzes — hardcoded por `moduloId` inline nas páginas; mover para `data/` e criar serviço
+- [ ] Trilha Demo — módulos existem em `data/modulos.ts` mas exercícios/quizzes sem dados reais
+- [ ] Exercícios — hardcoded por `moduloId` inline nas páginas; mover para `data/` e criar serviço
+- [ ] Quizzes — hardcoded por `moduloId` inline nas páginas; mover para `data/` e criar serviço
+- [ ] Conteúdo de tópicos — apenas ~12 tópicos têm conteúdo real em `data/conteudo.ts`; demais usam fallback genérico
 
 ---
 
 ## ⚪ Melhorias de UX
 
-- [x] `busca/page.tsx` — adicionar debounce na atualização da URL (atualmente atualiza a cada keystroke)
-- [x] `notificacoes/page.tsx` — adicionar botão "Marcar como lida" individual e "Marcar todas como lidas"
-- [x] `configuracoes/page.tsx` — botão de câmera no avatar deve abrir modal de upload inline (igual ao perfil), não redirecionar para `/perfil/usuario`
-- [x] Configurações preview do perfil — "0 Trilhas", "0 Projetos", "0 Badges" hardcoded; deve refletir dados reais
-- [x] Planos — página de cadastro deve ler `?plano=` e pré-selecionar o plano correspondente
+- [x] `busca/page.tsx` — debounce de 300ms na atualização da URL
+- [x] `notificacoes/page.tsx` — marcar como lida individual e em massa
+- [x] `configuracoes/page.tsx` — modal de upload de avatar inline
+- [x] `planos/page.tsx` — toggle mensal/anual substituído por seletor de abas (sem overflow)
+- [x] `TrilhaCard` — badge "Grátis" (verde) para demo, "Pro" (azul) para pagas
+- [x] `planos/page.tsx` — botão Vitalício com gradiente dourado e ícone Crown
+- [ ] `projetos/[id]/page.tsx` — checklist persistindo no localStorage (sem backend)
+- [ ] `onboarding/page.tsx` — salvar preferências no localStorage
+
+---
+
+## 🔌 Aguardando Backend
+
+- [ ] Autenticação real (NextAuth.js ou Clerk + Supabase)
+- [ ] Persistência de progresso via API
+- [ ] Dados reais do perfil (stats, badges, atividade)
+- [ ] Checkout Stripe (planos Pro e Vitalício)
+- [ ] Notificações reais
+- [ ] Exportação de dados da conta
+- [ ] Geração de certificados com data e ID reais
+- [ ] Upload de avatar para storage (S3/Supabase Storage)
+- [ ] Envio de e-mails (confirmação de cadastro, recuperação de senha)
