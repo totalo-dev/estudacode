@@ -1,41 +1,47 @@
-# dependencies
+# ── Dependencies ──────────────────────────────────────────────────────────────
 /node_modules
 /.pnp
 .pnp.js
+.yarn/install-state.gz
 
-# testing
-/coverage
-
-# next.js
+# ── Next.js build output ──────────────────────────────────────────────────────
 /.next/
 /out/
-
-# production
 /build
 
-# misc
-.DS_Store
-*.pem
-*.log
+# ── Testing ───────────────────────────────────────────────────────────────────
+/coverage
 
-# editor and IDE settings
-.vscode/
-.idea/
-
-# debug
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
+# ── Environment variables ─────────────────────────────────────────────────────
 .env
 .env.*
 !.env.example
 
-# vercel
-.vercel
-
-# typescript
+# ── TypeScript ────────────────────────────────────────────────────────────────
 *.tsbuildinfo
 next-env.d.ts
+
+# ── Debug logs ────────────────────────────────────────────────────────────────
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# ── OS generated files ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Certificates and keys ─────────────────────────────────────────────────────
+*.pem
+*.key
+*.cert
+
+# ── Editor and IDE ────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Deployment ────────────────────────────────────────────────────────────────
+.vercel
