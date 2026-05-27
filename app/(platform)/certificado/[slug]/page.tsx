@@ -19,8 +19,18 @@ const DATA_CONCLUSAO = new Date().toLocaleDateString("pt-BR", {
   year: "numeric",
 });
 
-function gerarId(slug: string) {
-  return `EC-${slug.slice(0, 3).toUpperCase()}-2026-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+function gerarId(slug: string): string {
+  // Tenta carregar ID já gerado para este slug (estável entre renders)
+  const chave = `estudacode:cert-id:${slug}`;
+  try {
+    const salvo = localStorage.getItem(chave);
+    if (salvo) return salvo;
+    const novo = `EC-${slug.slice(0, 3).toUpperCase()}-2026-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+    localStorage.setItem(chave, novo);
+    return novo;
+  } catch {
+    return `EC-${slug.slice(0, 3).toUpperCase()}-2026-DEMO`;
+  }
 }
 
 function calcularProgressoTrilha(
@@ -133,7 +143,7 @@ export default function CertificadoPage({ params }: { params: { slug: string } }
             <div className="px-8 md:px-16 py-12 md:py-16 text-center">
               <div className="flex items-center justify-center space-x-3 mb-10">
                 <Image
-                  src="/favicon_io/android-chrome-192x192.png"
+                  src="/favicon_io/web-app-manifest-192x192.png"
                   alt="EstudaCode"
                   width={40}
                   height={40}

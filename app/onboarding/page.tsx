@@ -54,6 +54,16 @@ export default function OnboardingPage() {
   }
 
   function comecar() {
+    // Salva preferências do onboarding no localStorage
+    try {
+      localStorage.setItem("estudacode:onboarding", JSON.stringify({
+        objetivo,
+        nivel,
+        trilhaSelecionada,
+        concluidoEm: new Date().toISOString(),
+      }));
+    } catch {}
+
     if (trilhaSelecionada) {
       router.push(`/trilhas/${trilhaSelecionada}`);
     } else {
@@ -70,7 +80,7 @@ export default function OnboardingPage() {
       <header className="px-4 py-5 border-b border-surface">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="/favicon_io/android-chrome-192x192.png" alt="EstudaCode" width={28} height={28} className="object-contain" />
+            <Image src="/favicon_io/web-app-manifest-192x192.png" alt="EstudaCode" width={28} height={28} className="object-contain" />
             <span className="text-lg font-bold text-text">EstudaCode</span>
           </Link>
           <Link href="/dashboard" className="text-secondary hover:text-text text-sm transition-colors">

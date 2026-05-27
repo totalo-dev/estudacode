@@ -33,10 +33,15 @@ export default function ProjetoPage({ params }: { params: { id: string } }) {
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
   
   const toggleTask = (taskId: string) => {
-    setChecklist(checklist.map(item =>
+    const novoChecklist = checklist.map(item =>
       item.id === taskId ? { ...item, concluido: !item.concluido } : item
-    ));
+    );
+    setChecklist(novoChecklist);
     setSalvo(false);
+    // Auto-salva no localStorage a cada toggle
+    if (projeto) {
+      localStorage.setItem(`estudacode:projeto:${projeto.id}`, JSON.stringify(novoChecklist));
+    }
   };
 
   function salvarProgresso() {

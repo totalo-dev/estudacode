@@ -17,7 +17,7 @@ const canais = [
     membros: "2.400+ membros",
     cor: "text-indigo-400",
     corBg: "bg-indigo-500/10",
-    href: "#",
+    href: "https://discord.gg/estudacode",
     cta: "Entrar no Discord",
   },
   {
@@ -27,7 +27,7 @@ const canais = [
     membros: "800+ repositórios",
     cor: "text-text",
     corBg: "bg-surface",
-    href: "#",
+    href: "https://github.com/estudacode",
     cta: "Ver no GitHub",
   },
   {
@@ -37,7 +37,7 @@ const canais = [
     membros: "1.200+ seguidores",
     cor: "text-text",
     corBg: "bg-surface",
-    href: "#",
+    href: "https://x.com/estudacode",
     cta: "Seguir no X",
   },
 ];

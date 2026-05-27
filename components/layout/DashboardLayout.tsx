@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useAvatar } from "@/lib/hooks/useAvatar";
 import { logout } from "@/lib/auth/session";
 import { useAuthContext } from "@/lib/contexts/AuthContext";
+import { useNotificacoes } from "@/lib/contexts/NotificacoesContext";
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
@@ -19,36 +20,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [notificacoesAberto, setNotificacoesAberto] = useState(false);
   const { avatarUrl } = useAvatar();
   const { nome, email } = useAuthContext();
-  
-  const [listaNotificacoes, setListaNotificacoes] = useState([
-    {
-      id: 1,
-      titulo: "Novo módulo liberado! 🎉",
-      descricao: 'O módulo "React Hooks Avançados" já está disponível na sua trilha.',
-      tempo: "Há 2 horas",
-      lida: false,
-    },
-    {
-      id: 2,
-      titulo: "Lembrete de prática",
-      descricao: "Você não faz exercícios há 3 dias. Que tal praticar hoje?",
-      tempo: "Ontem",
-      lida: true,
-    },
-    {
-      id: 3,
-      titulo: "Certificado disponível",
-      descricao: "Parabéns! Você concluiu a trilha de Fundamentos.",
-      tempo: "Há 2 dias",
-      lida: true,
-    }
-  ]);
+  const { notificacoes: listaNotificacoes, naoLidas, marcarTodasLidas } = useNotificacoes();
 
-  const temNaoLida = listaNotificacoes.some(n => !n.lida);
-
-  const marcarTodasLidas = () => {
-    setListaNotificacoes(prev => prev.map(n => ({ ...n, lida: true })));
-  };
+  const temNaoLida = naoLidas > 0;
 
   const perfilRef = useRef<HTMLDivElement>(null);
   const notificacoesRef = useRef<HTMLDivElement>(null);

@@ -1,62 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { Bell, CheckCircle2, Check } from "lucide-react";
 import Button from "@/components/ui/Button";
-
-interface Notificacao {
-  id: number;
-  titulo: string;
-  descricao: string;
-  tempo: string;
-  lida: boolean;
-}
-
-const notificacoesIniciais: Notificacao[] = [
-  {
-    id: 1,
-    titulo: "Novo módulo liberado! 🎉",
-    descricao: 'O módulo "React Hooks Avançados" já está disponível na sua trilha.',
-    tempo: "Há 2 horas",
-    lida: false,
-  },
-  {
-    id: 2,
-    titulo: "Lembrete de prática",
-    descricao: "Você não faz exercícios há 3 dias. Que tal praticar hoje?",
-    tempo: "Ontem",
-    lida: false,
-  },
-  {
-    id: 3,
-    titulo: "Certificado disponível",
-    descricao: "Parabéns! Você concluiu a trilha de Fundamentos.",
-    tempo: "Há 2 dias",
-    lida: true,
-  },
-  {
-    id: 4,
-    titulo: "Bem-vindo ao EstudaCode!",
-    descricao: "Comece sua primeira trilha de estudos e acelere sua carreira.",
-    tempo: "Há 1 semana",
-    lida: true,
-  },
-];
+import { useNotificacoes } from "@/lib/contexts/NotificacoesContext";
 
 export default function NotificacoesPage() {
-  const [notificacoes, setNotificacoes] = useState<Notificacao[]>(notificacoesIniciais);
-
-  const naoLidas = notificacoes.filter((n) => !n.lida).length;
-
-  function marcarComoLida(id: number) {
-    setNotificacoes((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, lida: true } : n))
-    );
-  }
-
-  function marcarTodasLidas() {
-    setNotificacoes((prev) => prev.map((n) => ({ ...n, lida: true })));
-  }
+  const { notificacoes, naoLidas, marcarComoLida, marcarTodasLidas } = useNotificacoes();
 
   return (
       <div className="max-w-3xl mx-auto space-y-6">

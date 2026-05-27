@@ -47,12 +47,12 @@
 ## 🟡 Funcionalidades sem ação (botões mortos)
 
 - [x] `configuracoes/page.tsx` aba Perfil — salva nome/email/username no `AuthContext` e localStorage
-- [ ] `configuracoes/page.tsx` aba Senha — campos sem `value`/`onChange`; submit não faz nada 🔌
-- [ ] `configuracoes/page.tsx` aba Notificações — toggles não persistem no reload 🔌
-- [ ] `configuracoes/page.tsx` aba Conta — botão "Solicitar exportação" sem `onClick` 🔌
-- [ ] `configuracoes/page.tsx` aba Conta — exclusão de conta sem ação real 🔌
-- [ ] `projetos/[id]/page.tsx` — botão "Salvar Progresso" sem `onClick`; checklist perde estado no reload
-- [ ] `comunidade/page.tsx` — links do Discord, GitHub e Twitter apontam para `#`
+- [x] `configuracoes/page.tsx` aba Senha — campos controlados com validação e feedback de sucesso
+- [x] `configuracoes/page.tsx` aba Notificações — toggles persistem no localStorage
+- [x] `configuracoes/page.tsx` aba Conta — botão exportar gera `estudacode-dados.json` real
+- [x] `projetos/[id]/page.tsx` — checklist auto-salva no localStorage a cada toggle
+- [x] `comunidade/page.tsx` — links reais (Discord, GitHub, X)
+- [x] `onboarding/page.tsx` — salva objetivo, nível e trilha no localStorage ao concluir
 - [ ] Certificado — botão "Baixar PDF" chama `window.print()`, não gera PDF real 🔌
 
 ---
@@ -62,7 +62,9 @@
 - [x] `lib/contexts/AuthContext.tsx` — criado, conectado em Dashboard, Perfil, Certificado, Configurações, DashboardLayout
 - [x] `app/(platform)/suporte/page.tsx` — criado e na Sidebar
 - [x] `app/(platform)/suporte-vip/page.tsx` — criado e na Sidebar (condicional ao plano)
-- [ ] `lib/contexts/NotificacoesContext.tsx` — estado de notificações duplicado entre layout e página
+- [x] `lib/contexts/NotificacoesContext.tsx` — estado de notificações centralizado, sincroniza dropdown e página
+- [x] Certificado — ID gerado uma vez e salvo no localStorage por slug (estável entre renders)
+- [x] Certificado — logo corrigido para `web-app-manifest-192x192.png`
 - [ ] `app/(platform)/layout.tsx` — layout compartilhado para o grupo `(platform)`
 - [ ] Editor de código real nos exercícios — substituir `<textarea>` por Monaco Editor ou CodeMirror
 
@@ -86,8 +88,8 @@
 - [x] `planos/page.tsx` — toggle mensal/anual substituído por seletor de abas (sem overflow)
 - [x] `TrilhaCard` — badge "Grátis" (verde) para demo, "Pro" (azul) para pagas
 - [x] `planos/page.tsx` — botão Vitalício com gradiente dourado e ícone Crown
-- [ ] `projetos/[id]/page.tsx` — checklist persistindo no localStorage (sem backend)
-- [ ] `onboarding/page.tsx` — salvar preferências no localStorage
+- [x] `projetos/[id]/page.tsx` — checklist persistindo no localStorage (sem backend)
+- [x] `onboarding/page.tsx` — salvar preferências no localStorage
 
 ---
 
