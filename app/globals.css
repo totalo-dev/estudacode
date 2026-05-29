@@ -34,4 +34,21 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .scrollbar-dark::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-thumb {
+    background: var(--color-card);
+    border-radius: 3px;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-thumb:hover {
+    background: var(--color-secondary);
+  }
 }

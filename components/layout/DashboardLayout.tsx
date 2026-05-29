@@ -133,7 +133,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         </button>
                       )}
                     </div>
-                    <div className="max-h-80 overflow-y-auto">
+                    <div className="max-h-80 overflow-y-auto scrollbar-dark">
                       {listaNotificacoes.map((notif) => (
                         <div key={notif.id} className={`px-4 py-3 border-b border-card hover:bg-card transition-colors cursor-pointer ${notif.lida ? 'opacity-70' : 'bg-primary/5'}`}>
                           <p className="text-sm text-text font-medium flex items-center gap-2">
